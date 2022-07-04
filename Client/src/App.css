@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+*{
+  transition: all 250ms;
+
+}
+.App {
+  text-align: center;
+  background: url("./Common\ Resources/bg2.jpg") no-repeat center center/cover;
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+.dock {
+  /* border: 1px solid rgb(73, 98, 125); */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 95%;
+}
+
+.dock-container {
+  border: 1px solid rgb(159, 168, 178);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: -3px -3px 12px rgba(0, 0, 0, 0.3), 2px 3px 20px rgba(29, 29, 29, 0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 13px;
+  height: 100%;
+  width: 95%;
+  /* padding: 15px; */
+
+}
+
+
+
+::-webkit-scrollbar {
+  display: none;
+}

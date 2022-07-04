@@ -1,0 +1,99 @@
+.header {
+    display: flex;
+    padding: 20px 30px;
+    font-size: 1.25rem;
+}
+
+.navbar-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-right {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    padding: 12px 30px;
+    /* font-size: 1rem; */
+    transition: all 250ms;
+    box-shadow: 1px 1px 7px rgba(255, 255, 255, 0.15);
+}
+
+.nav-btn:hover {
+    background-color: rgba(160, 157, 157, 0.585);
+}
+
+.nav-btn:nth-child(2) {
+    background-color: rgba(160, 157, 157, 0.585);
+}
+
+.nav-btn:nth-child(2):hover {
+    background-color: rgba(160, 157, 157, 0.801);
+}
+
+.user-details-container {
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.85);
+    color: black;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.user-details-container {
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.25);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 250ms;
+}
+
+.user-details-container-open {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.user-details-ops {
+    position: absolute;
+    top: 103%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.102);
+    height: 0;
+    overflow: hidden;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.user-details-ops-open {
+    height: unset;
+}
+
+.user-details-ops button {
+    border: unset !important;
+    box-shadow: unset !important;
+    margin: 5px 0px;
+    border-radius: 8px;
+}
+
+.user-details-ops button:hover {
+    border-radius: unset !important;
+}
+
+.user-header-pic {
+    width: 25px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
