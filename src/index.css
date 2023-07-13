@@ -104,11 +104,11 @@
 }
 
 .sidebar li {
-  font-size: 25px;
+  font-size: 22px;
 }
 
 .sidebar li:not(:last-child) {
-  margin-bottom: 130px;
+  margin-bottom: 80px;
 }
 
 .home-input {

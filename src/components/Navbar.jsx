@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { logo, menu, close, profile, down } from "../assets";
 import { navLinks } from "../constants";
 import { Link, useNavigate } from "react-router-dom";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   const [profileToggle, setProfileToggle] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const { state, logoutFunc } = useDataLayerValue();
   const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    logoutFunc();
+  };
+
+  useEffect(() => {
+    if (toggle) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [toggle]);
 
   return (
     <nav className="w-full flex py-6 justify-between items-center mavbar z-50">
@@ -26,7 +40,7 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
-      {loggedIn ? (
+      {state.loggedIn ? (
         <div
           className="relative sm:flex hidden items-center font-poppins font-medium cursor-pointer text-[18px] text-white ml-10 rounded-md "
           onClick={() => setProfileToggle(!profileToggle)}
@@ -42,10 +56,16 @@ const Navbar = () => {
           />
           {profileToggle && (
             <ul className="absolute right-0 top-10 sm:block hidden bg-[rgba(255,255,255,0.05)] rounded-md z-[1] overflow-hidden">
-              <li className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white mb-1">
+              <li
+                className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white mb-1"
+                onClick={() => navigate("profile")}
+              >
                 Profile
               </li>
-              <li className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white ">
+              <li
+                className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white "
+                onClick={() => handleLogoutClick()}
+              >
                 Logout
               </li>
             </ul>
@@ -80,9 +100,9 @@ const Navbar = () => {
         <div
           className={`${
             toggle ? "flex" : "hidden"
-          } p-6 mx-4 min-w-[140px] w-[95vw] rounded-xl sidebar z-5 `}
+          } p-5 mx-4 min-w-[140px] w-[95vw] rounded-xl sidebar z-5 `}
         >
-          <ul className="list-none flex-col  flex-1">
+          <ul className="list-none flex-col  flex-1 ">
             {navLinks.map((nav, i) => (
               <li
                 key={i}
@@ -92,7 +112,7 @@ const Navbar = () => {
                 <a href={`#${nav.id}`}>{nav.title}</a>
               </li>
             ))}
-            {loggedIn ? (
+            {state.loggedIn ? (
               <li
                 className="font-poppins font-semibold cursor-pointer text-center text-gradient"
                 onClick={() => navigate("/profile")}

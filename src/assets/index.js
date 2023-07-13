@@ -25,6 +25,8 @@ import fullscreen from "./fullscreen.png";
 import down from "./down.png";
 import endcall from "./endcall.png";
 import cancel from "./close.png";
+import loader from "./loader.gif";
+import loader2 from "./loader2.gif";
 
 export {
   logo,
@@ -54,4 +56,6 @@ export {
   videoff,
   fullscreen,
   endcall,
+  loader,
+  loader2,
 };

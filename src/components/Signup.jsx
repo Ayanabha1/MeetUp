@@ -1,8 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const Signup = () => {
+  const [signupData, setSignupData] = useState({});
+  const { signupFunc } = useDataLayerValue();
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setSignupData((signupData) => ({ ...signupData, [id]: value }));
+  };
+
+  const handleSignupFunc = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await signupFunc(signupData);
+      navigate("/");
+    } catch (err) {
+      console.log("Error in signup ... Try again");
+    }
+  };
+
   return (
     <div className="flex bg-primary w-[100vw] h-[100vh] overflow-hidden justify-center items-center relative ">
       <div className="absolute z-[0] w-[40%] h-[35%] top-0 left-0 pink__gradient_2 " />
@@ -17,7 +37,7 @@ const Signup = () => {
             Please enter your details
           </span>
         </div>
-        <div className="flex flex-col">
+        <form className="flex flex-col" onSubmit={(e) => handleSignupFunc(e)}>
           <label htmlFor="name" className="my-1 mt-5 text-[rgb(179,180,183)]">
             Name
           </label>
@@ -25,18 +45,22 @@ const Signup = () => {
             type="text"
             id="name"
             placeholder="Enter name"
+            onChange={(e) => handleChange(e)}
             className="p-2 rounded-[5px] mb-4
              bg-[rgb(24,24,35)]"
+            required
           />
           <label htmlFor="email" className="my-1 mt-5 text-[rgb(179,180,183)]">
             Email Address
           </label>
           <input
-            type="text"
+            type="email"
             id="email"
             placeholder="Enter Email id"
+            onChange={(e) => handleChange(e)}
             className="p-2 rounded-[5px] mb-4
              bg-[rgb(24,24,35)]"
+            required
           />
           <label
             htmlFor="password"
@@ -45,11 +69,13 @@ const Signup = () => {
             Password
           </label>
           <input
-            type="text"
+            type="password"
             id="password"
             placeholder="******"
+            onChange={(e) => handleChange(e)}
             className="p-2 rounded-[5px] mb-4
              bg-[rgb(24,24,35)]"
+            required
           />
           <span className="text-[rgb(179,180,183)]">
             Already have an account?{" "}
@@ -63,7 +89,7 @@ const Signup = () => {
           >
             Signup
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

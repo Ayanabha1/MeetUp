@@ -1,8 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const Login = () => {
+  const [loginData, setLoginData] = useState({});
+  const { loginFunc } = useDataLayerValue();
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setLoginData((loginData) => ({ ...loginData, [id]: value }));
+  };
+  const handleLoginClick = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await loginFunc(loginData);
+      navigate("/");
+    } catch (err) {
+      console.log("Error in login ... Try again");
+    }
+  };
+
   return (
     <div className="flex bg-primary w-[100vw] h-[100vh] overflow-hidden justify-center items-center relative ">
       <div className="absolute z-[0] w-[40%] h-[35%] top-0 left-0 pink__gradient_2 " />
@@ -16,16 +34,18 @@ const Login = () => {
             Please enter your details
           </span>
         </div>
-        <div className="flex flex-col">
+        <form className="flex flex-col" onSubmit={(e) => handleLoginClick(e)}>
           <label htmlFor="email" className="my-1 mt-5 text-[rgb(179,180,183)]">
             Email Address
           </label>
           <input
-            type="text"
+            type="email"
             id="email"
+            onChange={(e) => handleChange(e)}
             placeholder="Enter Email id"
             className="p-2 rounded-[5px] mb-4
              bg-[rgb(24,24,35)]"
+            required
           />
           <label
             htmlFor="password"
@@ -34,11 +54,13 @@ const Login = () => {
             Password
           </label>
           <input
-            type="text"
+            type="password"
             id="password"
             placeholder="******"
+            onChange={(e) => handleChange(e)}
             className="p-2 rounded-[5px] mb-4
-             bg-[rgb(24,24,35)]"
+            bg-[rgb(24,24,35)]"
+            required
           />
           <span className="text-[rgb(179,180,183)]">
             Don't have an account?{" "}
@@ -52,7 +74,7 @@ const Login = () => {
           >
             Sign in
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
