@@ -29,6 +29,17 @@ export const DataLayer = ({ initialState, reducer, children }) => {
       theme: "dark",
     });
   };
+  const showInfo = (message) => {
+    toast.info(message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
 
   const startLoading = () => {
     dispatch({
@@ -62,6 +73,10 @@ export const DataLayer = ({ initialState, reducer, children }) => {
     dispatch({
       type: "SET_LOGIN_STATUS",
       loggedIn: false,
+    });
+    dispatch({
+      type: "SET_USER_DATA",
+      userData: null,
     });
   };
 
@@ -128,6 +143,7 @@ export const DataLayer = ({ initialState, reducer, children }) => {
         stopLoading,
         showSuccess,
         showError,
+        showInfo,
         getUser,
       }}
     >

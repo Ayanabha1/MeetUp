@@ -315,7 +315,10 @@
   object-fit: contain;
 }
 
+.meet-control-icon-off {
+  background-color: #FC5E5C !important;
 
+}
 
 .meet-end-btn {
   background-color: #FC5E5C;
@@ -336,6 +339,11 @@
     height: 30px;
   }
 
+}
+
+.meet-sidebar {
+  box-shadow: 1px 1px 20px rgba(255, 255, 255, 0.15);
+  border: 1px solid black;
 }
 
 .meet-sidebar-chat::-webkit-scrollbar {

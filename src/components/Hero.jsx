@@ -3,8 +3,10 @@ import styles from "../styles";
 import GetStarted from "./GetStarted";
 import { hero, hero2 } from "../assets";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Hero = () => {
+  const [joinLink, setJoinLink] = useState("");
   const navigate = useNavigate();
   const scrollToTop = () => {
     console.log("first");
@@ -13,6 +15,24 @@ const Hero = () => {
       behavior: "smooth",
     });
   };
+
+  const generateRoomName = () => {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const alphanumeric = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+    const randomChar = (characters) =>
+      characters.charAt(Math.floor(Math.random() * characters.length));
+
+    let randomString = randomChar(alphabet); // Start with an alphabet
+
+    for (let i = 0; i < 9; i++) {
+      // Append 9 more characters from the alphanumeric set
+      randomString += randomChar(alphanumeric);
+    }
+
+    return randomString;
+  };
+
   return (
     <section id="home" className={`flex md:flex-row flex-col py-6`}>
       <div
@@ -40,29 +60,44 @@ const Hero = () => {
           </div> */}
         </div>
 
-        <h1 className="font-poppins font-semibold mbl:text-[46px] ss:text-[72px] text-[35px] text-white ss:leading-[100px] w-full">
+        <h1 className="font-poppins font-semibold mbl:text-[46px] ss:text-[72px] text-[35px] text-white ss:leading-[100px] w-[220%]">
           Conquer Together
         </h1>
         <p className={`${styles.paragraph}   mt-5`}>
           Video Conferencing, Simplified. Elevate your online meetings with our
           seamless and engaging platform.
         </p>
-        <div className="flex flex-1 mt-10 ss:w-[500px]  w-full mbl:flex-nowrap flex-wrap">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (joinLink !== "") {
+              navigate(`/meet/${joinLink.trim()}`);
+            }
+          }}
+          className="flex flex-1 mt-10  items-center w-full mbl:flex-nowrap flex-wrap"
+        >
           <input
             type="text"
             placeholder="Enter meeting name"
             className="home-input"
             id="meet-name"
+            value={joinLink}
+            onChange={(e) => setJoinLink(e.target.value)}
           />
           <button
+            type="submit"
             className="home-create-btn font-poppin font-medium text-[16px]"
-            onClick={() => {
-              navigate("/meet");
-            }}
           >
-            Connect
+            Join
           </button>
-        </div>
+          <button
+            type="button"
+            className="home-create-btn font-poppin font-medium text-[16px] mx-[5px]"
+            onClick={() => navigate(`/meet/${generateRoomName()}`)}
+          >
+            Create Meet
+          </button>
+        </form>
       </div>
       <div
         className={`flex-1 flex md:justify-end ${styles.flexCenter} md:mt-[0px] relative`}

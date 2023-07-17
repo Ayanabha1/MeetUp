@@ -46,7 +46,7 @@ const Navbar = () => {
           onClick={() => setProfileToggle(!profileToggle)}
         >
           <img src={profile} alt="" className="w-[25px] mr-2" />
-          <span className="text-gradient">Ayanabha</span>
+          <span className="text-gradient">{state?.userData?.name}</span>
           <img
             src={down}
             alt=""

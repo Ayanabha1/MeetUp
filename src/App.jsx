@@ -20,7 +20,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route exact path="/" element={<HomeDock />} />
-          <Route path="/meet" element={<MeetingPage />} />
+          <Route path="/meet/:roomId" element={<MeetingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

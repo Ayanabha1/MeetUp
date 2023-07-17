@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   chat2,
   endcall,
@@ -12,11 +12,47 @@ import {
   videon,
   cancel,
 } from "../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import MeetFeeds from "./MeetFeeds";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
+import {
+  config,
+  useRTCClient,
+  useMicrophoneAndCameraTracks,
+  useRTMClient,
+} from "./commSettings";
+import MeetControls from "./MeetControls";
+import AgoraRTM from "agora-rtm-react";
 
 const MeetingPage = () => {
+  // agora variables and functions
+  const [start, setStart] = useState(false);
+  const [name, setName] = useState("");
+  const [channelName, setChannelName] = useState("");
+  const [participants, setParticipants] = useState([]);
+  const rtc__client = useRTCClient();
+  const rtm__client = useRTMClient();
+  const { ready, tracks } = useMicrophoneAndCameraTracks();
+  const [uid, setUid] = useState(String(Math.floor(Math.random() * 10000)));
+  const { state, startLoading, stopLoading, showError, showSuccess, showInfo } =
+    useDataLayerValue();
+  const navigate = useNavigate();
+  let channelRef = useRef();
+  const [memberDetails, setMemberDetails] = useState([]);
+  const [chats, setChats] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
   const [duration, setDuration] = useState(0);
+  const urlParams = useParams();
+
+  useEffect(() => {
+    setChannelName(urlParams?.roomId);
+  }, [urlParams]);
+
+  useEffect(() => {
+    if (state.loggedIn) {
+      setName(state?.userData?.name);
+    }
+  }, [state.loggedIn]);
 
   const getTime = () => {
     const d = new Date();
@@ -89,6 +125,170 @@ const MeetingPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleMemberJoined = async (MemberId) => {
+    console.log("New member : " + MemberId);
+    let { name, uid } = await rtm__client.getUserAttributesByKeys(MemberId, [
+      "name",
+      "uid",
+    ]);
+    setMemberDetails((prev) => [...prev, { name, uid }]);
+  };
+
+  const handleMemberLeft = async (MemberId) => {
+    try {
+      const { name, uid } = await rtm__client.getUserAttributesByKeys(
+        MemberId,
+        ["name", "uid"]
+      );
+      console.log("Member left ... :(" + name);
+      showInfo(`${name} left the chat`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAndAddMemberDetails = async (memberId) => {
+    const { name, uid } = await rtm__client.getUserAttributesByKeys(memberId, [
+      "name",
+      "uid",
+    ]);
+    setMemberDetails((prev) => [...prev, { name, uid, mic__muted: false }]);
+  };
+
+  const getAllMemberDetails = async () => {
+    let members = await channelRef.current?.getMembers();
+    for (let i = 0; i < members.length; i++) {
+      getAndAddMemberDetails(members[i]);
+    }
+  };
+
+  const handleRecieveMessage = async (messageData, MemberId) => {
+    console.log("Message Recieved");
+    let data = JSON.parse(messageData.text);
+    if (data.type === "chat") {
+      console.log(data);
+      setChats((chats) => [...chats, data]);
+    }
+  };
+  useEffect(() => {
+    console.log(chats);
+  }, [chats]);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    if (newMessage === "") {
+      return;
+    }
+    let __message = newMessage;
+    __message = __message.trim();
+
+    const newChat = {
+      type: "chat",
+      name: name,
+      uid: uid,
+      time: getTime(),
+      picture: "",
+      message: __message,
+    };
+
+    setChats((chats) => [...chats, newChat]);
+    channelRef.current.sendMessage({ text: JSON.stringify(newChat) });
+
+    setNewMessage("");
+  };
+
+  useEffect(() => {
+    let init = async (roomName) => {
+      // RTM
+
+      try {
+        await rtm__client.login({ uid });
+        await rtm__client.addOrUpdateLocalUserAttributes({
+          name: name,
+          uid: uid,
+        });
+        let channel = await rtm__client.createChannel(roomName);
+        channelRef.current = channel;
+        await channelRef.current.join();
+
+        channelRef.current.on("MemberJoined", handleMemberJoined);
+        channelRef.current.on("MemberLeft", handleMemberLeft);
+        channelRef.current.on("ChannelMessage", handleRecieveMessage);
+        getAllMemberDetails();
+      } catch (err) {
+        console.log(err);
+      }
+
+      // RTC
+
+      rtc__client.on("user-published", async (user, mediaType) => {
+        await rtc__client.subscribe(user, mediaType);
+        if (mediaType === "video") {
+          if (participants.filter((p) => p.uid === user.uid)) {
+            setParticipants((prevParts) =>
+              prevParts.filter((p) => p.uid !== user.uid)
+            );
+          }
+          setParticipants((prevParts) => [...prevParts, user]);
+        }
+        if (mediaType === "audio") {
+          user.audioTrack.play();
+        }
+      });
+
+      rtc__client.on("user-unpublished", (user, mediaType) => {
+        if (mediaType === "audio") {
+          if (user.audioTrack) {
+            user.audioTrack.stop();
+          }
+          if (mediaType === "video") {
+            setParticipants((prevParts) =>
+              prevParts.filter((p) => p.uid !== user.uid)
+            );
+          }
+        }
+      });
+
+      rtc__client.on("user-left", async (user) => {
+        await handleMemberLeft(user.uid);
+        setParticipants((prevParts) =>
+          prevParts.filter((p) => p.uid !== user.uid)
+        );
+      });
+
+      try {
+        await rtc__client?.join(config.APP_ID, roomName, config.token, uid);
+      } catch (err) {
+        console.log(err);
+      }
+
+      if (tracks) {
+        await rtc__client.publish([tracks[0], tracks[1]]);
+      }
+      setStart(true);
+    };
+
+    if (state.loggedIn && channelName !== "" && name && ready && tracks) {
+      try {
+        init(channelName);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return () => {
+      rtc__client.leave();
+      channelRef.current?.leave();
+      rtm__client.logout();
+
+      if (tracks) {
+        tracks[1].stop();
+        tracks[1].close();
+        tracks[0].stop();
+        tracks[0].close();
+      }
+    };
+  }, [state, channelName, rtc__client, ready, tracks]);
+
   return (
     <div className="meeting-dock bg-primary w-full h-full overflow-hidden">
       <div className="flex flex-1 flex-col h-full">
@@ -123,38 +323,26 @@ const MeetingPage = () => {
             }`}
           >
             <div className="flex-[0.95] flex justify-center overflow-hidden ">
-              <MeetFeeds />
+              <MeetFeeds
+                tracks={tracks}
+                participants={participants}
+                rtc__client={rtc__client}
+                memberDetails={memberDetails}
+                name={name}
+              />
             </div>
             {/* Meeting controls */}
-            <div className="flex-[0.05] flex justify-center relative">
-              <div className="meetcode absolute left-0 bottom-[50%] translate-y-[50%] bg-[#2E3137] px-4 py-2 rounded-[8px] -z-10 hidden sm:block  sm:z-10 ">
-                abc-def-ghi
-              </div>
-              <div className="flex w-[80%] items-center justify-center">
-                <div className="meet-control-icon">
-                  <img src={videon}></img>
-                </div>
-                <div className="meet-control-icon">
-                  <img src={micon}></img>
-                </div>
-
-                <div className="meet-control-icon meet-end-btn">
-                  <img src={endcall}></img>
-                </div>
-
-                <div className="meet-control-icon">
-                  <img src={fullscreen}></img>
-                </div>
-                <div className="meet-control-icon" onClick={() => toggleChat()}>
-                  <img src={chat2}></img>
-                </div>
-              </div>
-            </div>
+            <MeetControls
+              toggleChat={toggleChat}
+              tracks={tracks}
+              channelRef={channelRef}
+              uid={uid}
+            />
           </div>
 
           {/* Meet sidebar */}
           {chatOpen && (
-            <div className="meet-sidebar flex flex-col justify-between bg-[rgb(24,24,35,0.75)] backdrop-blur-[3px] sm:bg-[rgb(24,24,35)] rounded-[8px] sm:w-[400px] h-[100%] absolute sm:static">
+            <div className="meet-sidebar w-full flex flex-col justify-between bg-[rgb(24,24,35,0.75)] backdrop-blur-[3px] sm:bg-[rgba(24,24,35,0.2)] rounded-[8px] sm:w-[400px] h-[100%] absolute sm:static">
               {/* Chat section */}
               <div className="meet-sidebar-chat  flex-[0.88] overflow-y-scroll relative">
                 <div
@@ -166,63 +354,80 @@ const MeetingPage = () => {
                 <p className="text-center my-3 mx-5 underline underline-offset-8">
                   Messages
                 </p>
-                {/* other's merssage */}
-                <div className="flex flex-col p-5 ">
-                  <div className="flex">
-                    <img
-                      src={person2}
-                      alt="name"
-                      className="w-[42px] h-[42px] object-cover rounded-[5px]"
-                    />
-                    <div className="flex flex-col w-full ml-4">
-                      <div className="flex justify-between">
-                        <span className="text-dimWhite">Sam Das</span>
-                        <span className="text-[rgb(131,132,138)]">
-                          10:29 PM
-                        </span>
+                {chats?.map((chat, i) => {
+                  if (chat?.uid === uid) {
+                    // user's message
+                    return (
+                      <div className="flex flex-col p-5" key={chat?.uid}>
+                        <div className="flex flex-row-reverse">
+                          <img
+                            src={person3}
+                            alt="name"
+                            className="w-[42px] h-[42px] object-cover rounded-[5px]"
+                          />
+                          <div className="flex flex-col w-full mr-4">
+                            <div className="flex flex-row-reverse justify-between">
+                              <span className="text-dimWhite">You</span>
+                              <span className="text-[rgb(131,132,138)]">
+                                {chat?.time}
+                              </span>
+                            </div>
+                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tr-none my-3 p-3">
+                              {chat?.message}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <p className="bg-[rgb(0,4,15,0.5)] sm:bg-[rgb(0,4,15)] rounded-[8px] rounded-tl-none my-3 p-3">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Quisquam ullam est culpa?
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* user's merssage */}
-                <div className="flex flex-col p-5">
-                  <div className="flex flex-row-reverse">
-                    <img
-                      src={person3}
-                      alt="name"
-                      className="w-[42px] h-[42px] object-cover rounded-[5px]"
-                    />
-                    <div className="flex flex-col w-full mr-4">
-                      <div className="flex flex-row-reverse justify-between">
-                        <span className="text-dimWhite">You</span>
-                        <span className="text-[rgb(131,132,138)]">
-                          10:29 PM
-                        </span>
+                    );
+                  } else {
+                    // other's message
+                    return (
+                      <div className="flex flex-col p-5 " key={i}>
+                        <div className="flex">
+                          <img
+                            src={person2}
+                            alt="name"
+                            className="w-[42px] h-[42px] object-cover rounded-[5px]"
+                          />
+                          <div className="flex flex-col w-full ml-4">
+                            <div className="flex justify-between">
+                              <span className="text-dimWhite">
+                                {chat?.name}
+                              </span>
+                              <span className="text-[rgb(131,132,138)]">
+                                {chat?.time}
+                              </span>
+                            </div>
+                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tl-none my-3 p-3">
+                              {chat?.message}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <p className="bg-[rgb(0,4,15,0.5)] sm:bg-[rgb(0,4,15)] rounded-[8px] rounded-tr-none my-3 p-3">
-                        Lorem, ipsum dolor.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                    );
+                  }
+                })}
               </div>
 
               {/* Send message */}
-              <div className="flex-[0.1] px-5 w-full mt-3">
+              <form
+                className="flex-[0.1] px-5 w-full mt-3"
+                onSubmit={(e) => sendMessage(e)}
+              >
                 <input
                   type="text"
                   placeholder="Type a message..."
-                  className=" px-3 py-2 bg-[rgb(0,4,15)] rounded-[8px] rounded-tr-none rounded-br-none w-[80%]"
+                  className=" px-3 py-2 bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tr-none rounded-br-none w-[80%]"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
                 />
-                <button className="px-3 py-2 bg-[rgb(0,209,205)] rounded-[8px] rounded-tl-none rounded-bl-none w-[20%] overflow-hidden">
+                <button
+                  type="submit"
+                  className="px-3 py-2 bg-[rgb(0,209,205)] rounded-[8px] rounded-tl-none rounded-bl-none w-[20%] overflow-hidden"
+                >
                   Send
                 </button>
-              </div>
+              </form>
             </div>
           )}
         </div>

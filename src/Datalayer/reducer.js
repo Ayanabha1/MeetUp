@@ -18,6 +18,11 @@ const reducer = (state, action) => {
         ...state,
         loggedIn: action.loggedIn,
       };
+    case "SET_USER_DATA":
+      return {
+        ...state,
+        userData: action.userData,
+      };
 
     default:
       return state;
