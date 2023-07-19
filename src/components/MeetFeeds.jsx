@@ -132,13 +132,14 @@ const RenderOnSmallScreen = ({ tracks, participants, memberDetails, name }) => {
     setSpotLight(user);
   };
 
+  useEffect(() => {
+    setPeople(participants.size);
+    console.log(participants.length);
+  }, [participants]);
+
   return (
     <div className="flex flex-col h-[95%] w-[100%] ">
-      <div
-        className={`meet-spotlight w-[100%] h-[${
-          people === 0 ? "100%" : "70%"
-        }] bg-black rounded-[5px] overflow-hidden relative`}
-      >
+      <div className={`meet-spotlight w-[100%] h-[70%] relative`}>
         {spotLight === null ? (
           <>
             <SpotLightFeed
@@ -161,11 +162,7 @@ const RenderOnSmallScreen = ({ tracks, participants, memberDetails, name }) => {
           </>
         )}
       </div>
-      <div
-        className={`meet-others h-[${
-          people === 0 ? "0%" : "30%"
-        }] flex mt-[20px] overflow-scroll`}
-      >
+      <div className={`meet-others h-[30%] flex mt-[20px] overflow-scroll`}>
         {spotLight !== null && (
           <div
             className="h-[100%] min-w-[30%] max-w-[30%] mr-2 overflow-hidden rounded-[5px] relative"
