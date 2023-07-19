@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../styles";
 import GetStarted from "./GetStarted";
-import { hero, hero2 } from "../assets";
+import { her1_new } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
@@ -102,7 +102,7 @@ const Hero = () => {
         className={`flex-1 flex md:justify-end ${styles.flexCenter} md:mt-[0px] relative`}
       >
         <img
-          src={hero2}
+          src={her1_new}
           alt="hero image"
           className="w-[80%] h-[80%] relative z-[5]"
         />

@@ -43,26 +43,26 @@ export const feedback = [
   {
     id: "feedback-1",
     content:
-      "Money is only a tool. It will take you wherever you wish, but it will not replace you as the driver.",
-    name: "Herman Jensen",
-    title: "Founder & Leader",
-    img: person1,
-  },
-  {
-    id: "feedback-2",
-    content:
-      "Money makes your life easier. If you're lucky to have it, you're lucky.",
-    name: "Steve Mark",
+      "MeetUp surpassed expectations, creating warm, close connections with quick setup and reliable calls, becoming essential for sharing precious moments.",
+    name: " Mark D.",
     title: "Founder & Leader",
     img: person2,
   },
   {
+    id: "feedback-2",
+    content:
+      "MeetUp revolutionized the way our team collaborates! The seamless connection and fast pair up makes virtual meetings a breeze.",
+    name: "Sarah J.",
+    title: "Project Manager",
+    img: person3,
+  },
+  {
     id: "feedback-3",
     content:
-      "It is usually people in the money business, finance, and international trade that are really rich.",
-    name: "Kenn Gallagher",
-    title: "Founder & Leader",
-    img: person3,
+      "MeetUp made my virtual events a huge success! It's the perfect platform for webinars and online workshops. Participants loved the smooth connection and engaging features. ",
+    name: "Emma W.",
+    title: "Event Organizer",
+    img: person1,
   },
 ];
 

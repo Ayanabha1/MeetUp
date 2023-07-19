@@ -27,6 +27,7 @@ import endcall from "./endcall.png";
 import cancel from "./close.png";
 import loader from "./loader.gif";
 import loader2 from "./loader2.gif";
+import her1_new from "./her1_new.png";
 
 export {
   logo,
@@ -58,4 +59,5 @@ export {
   endcall,
   loader,
   loader2,
+  her1_new,
 };
