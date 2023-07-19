@@ -38,7 +38,7 @@ const Hero = () => {
   return (
     <section id="home" className={`flex md:flex-row flex-col py-6`}>
       <div
-        className={`flex-1 ${styles.flexStart} z-[100000] flex-col xl:px-0 sm:px-16 px-6 py-[50px]`}
+        className={`flex-1 ${styles.flexStart} z-[20000] flex-col xl:px-0 sm:px-16 px-6 py-[50px]`}
       >
         <div className="flex flex-row items-center py-[6px] px-4 bg-discount-gradient rounded-[10px] mb-2 text-white">
           <p className={`${styles.paragraph}`}>
