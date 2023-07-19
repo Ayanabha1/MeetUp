@@ -73,7 +73,7 @@ const Hero = () => {
               showWarning("Please enter room id");
             }
           }}
-          className="flex flex-1 mt-10  items-center w-full mbl:flex-nowrap flex-wrap"
+          className="flex flex-1 mt-10 z-100 items-center w-full mbl:flex-nowrap flex-wrap"
         >
           <input
             type="text"
