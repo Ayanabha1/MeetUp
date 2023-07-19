@@ -40,6 +40,17 @@ export const DataLayer = ({ initialState, reducer, children }) => {
       theme: "dark",
     });
   };
+  const showWarning = (message) => {
+    toast.warning(message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
 
   const startLoading = () => {
     dispatch({
@@ -143,6 +154,7 @@ export const DataLayer = ({ initialState, reducer, children }) => {
         stopLoading,
         showSuccess,
         showError,
+        showWarning,
         showInfo,
         getUser,
       }}

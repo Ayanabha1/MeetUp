@@ -1,17 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  chat2,
-  endcall,
-  fullscreen,
-  logo,
-  micon,
-  person1,
-  person2,
-  person3,
-  user,
-  videon,
-  cancel,
-} from "../assets";
+import { logo, person2, person3, cancel } from "../assets";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import MeetFeeds from "./MeetFeeds";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
@@ -141,7 +129,7 @@ const MeetingPage = () => {
         ["name", "uid"]
       );
       console.log("Member left ... :(" + name);
-      showInfo(`${name} left the chat`);
+      showInfo(`${name} left the call`);
     } catch (error) {
       console.log(error);
     }
@@ -170,9 +158,6 @@ const MeetingPage = () => {
       setChats((chats) => [...chats, data]);
     }
   };
-  useEffect(() => {
-    console.log(chats);
-  }, [chats]);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -276,16 +261,18 @@ const MeetingPage = () => {
       }
     }
     return () => {
-      rtc__client.leave();
-      channelRef.current?.leave();
-      rtm__client.logout();
+      try {
+        rtc__client.leave();
+        channelRef.current?.leave();
+        rtm__client.logout();
 
-      if (tracks) {
-        tracks[1].stop();
-        tracks[1].close();
-        tracks[0].stop();
-        tracks[0].close();
-      }
+        if (tracks) {
+          tracks[1].stop();
+          tracks[1].close();
+          tracks[0].stop();
+          tracks[0].close();
+        }
+      } catch (error) {}
     };
   }, [state, channelName, rtc__client, ready, tracks]);
 

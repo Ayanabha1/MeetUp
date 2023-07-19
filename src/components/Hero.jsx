@@ -4,9 +4,11 @@ import GetStarted from "./GetStarted";
 import { hero, hero2 } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const Hero = () => {
   const [joinLink, setJoinLink] = useState("");
+  const { showWarning } = useDataLayerValue();
   const navigate = useNavigate();
   const scrollToTop = () => {
     console.log("first");
@@ -53,11 +55,6 @@ const Hero = () => {
             <span className="text-gradient">Collaborate</span>
             <br className="sm:block hidden" />
           </h1>
-          {/* <div className="ss:flex hidden mr-0">
-            <label htmlFor="meet-name">
-              <GetStarted />
-            </label>
-          </div> */}
         </div>
 
         <h1 className="font-poppins font-semibold mbl:text-[46px] ss:text-[72px] text-[35px] text-white ss:leading-[100px] w-[220%]">
@@ -72,6 +69,8 @@ const Hero = () => {
             e.preventDefault();
             if (joinLink !== "") {
               navigate(`/meet/${joinLink.trim()}`);
+            } else {
+              showWarning("Please enter room id");
             }
           }}
           className="flex flex-1 mt-10  items-center w-full mbl:flex-nowrap flex-wrap"
@@ -95,7 +94,7 @@ const Hero = () => {
             className="home-create-btn font-poppin font-medium text-[16px] mx-[5px]"
             onClick={() => navigate(`/meet/${generateRoomName()}`)}
           >
-            Create Meet
+            Create
           </button>
         </form>
       </div>
