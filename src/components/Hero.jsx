@@ -8,7 +8,7 @@ import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const Hero = () => {
   const [joinLink, setJoinLink] = useState("");
-  const { showWarning } = useDataLayerValue();
+  const { state, showError, showWarning } = useDataLayerValue();
   const navigate = useNavigate();
   const scrollToTop = () => {
     console.log("first");
@@ -38,7 +38,7 @@ const Hero = () => {
   return (
     <section id="home" className={`flex md:flex-row flex-col py-6`}>
       <div
-        className={`flex-1 ${styles.flexStart} z-[20000] flex-col xl:px-0 sm:px-16 px-6 py-[50px]`}
+        className={`flex-1 ${styles.flexStart} z-[4]  flex-col xl:px-0 sm:px-16 px-6 py-[50px]`}
       >
         <div className="flex flex-row items-center py-[6px] px-4 bg-discount-gradient rounded-[10px] mb-2 text-white">
           <p className={`${styles.paragraph}`}>
@@ -67,6 +67,10 @@ const Hero = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            if (!state.loggedIn) {
+              showWarning("User needs to be logged in");
+              return;
+            }
             if (joinLink !== "") {
               navigate(`/meet/${joinLink.trim()}`);
             } else {
@@ -92,7 +96,13 @@ const Hero = () => {
           <button
             type="button"
             className="home-create-btn font-poppin font-medium text-[16px] mx-[5px]"
-            onClick={() => navigate(`/meet/${generateRoomName()}`)}
+            onClick={() => {
+              if (!state.loggedIn) {
+                showWarning("User needs to be logged in");
+                return;
+              }
+              navigate(`/meet/${generateRoomName()}`);
+            }}
           >
             Create
           </button>
@@ -110,13 +120,6 @@ const Hero = () => {
         <div className="absolute z-[0] w-[80%] h-[85%] bottom-40 rounded-full white__gradient " />
         <div className="absolute z-[0] w-[50%] h-[50%] bottom-20 right-20 blue__gradient " />
       </div>
-
-      {/* <div
-        className={`ss:hidden ${styles.flexCenter}`}
-        onClick={() => scrollToTop()}
-      >
-        <GetStarted />
-      </div> */}
     </section>
   );
 };

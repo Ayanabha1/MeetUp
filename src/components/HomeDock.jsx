@@ -3,7 +3,6 @@ import styles from "../styles";
 import { Navbar, Hero, Stats, Testimonials, Footer } from "./index";
 import Features from "./Features";
 import { home, feedback, features, user } from "../assets";
-import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const HomeDock = () => {
   const [sidebarVis, setSidebarVis] = useState(false);

@@ -23,6 +23,9 @@
 
 * {
   scroll-behavior: smooth;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .App-Dock {
@@ -83,8 +86,8 @@
 
 .sidebar {
   position: absolute;
-  left: 0px;
-  top: 30px;
+  left: -10px;
+  top: 10px;
   -webkit-animation: slide-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: slide-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   z-index: 10;
@@ -93,7 +96,8 @@
       rgb(109 109 109 /20%) -78.47%,
       rgb(17 16 29 /90%) 91.61%);
   backdrop-filter: blur(8px);
-  height: 95%;
+  height: 100%;
+  width: 97.5%;
   align-items: center;
 }
 

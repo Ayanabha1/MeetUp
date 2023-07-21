@@ -253,6 +253,15 @@ const MeetingPage = () => {
       setStart(true);
     };
 
+    let timeoutId;
+    if (!state.loggedIn) {
+      timeoutId = setTimeout(() => {
+        if (!state.loggedIn) {
+          navigate("/");
+          showError("User is not logged in");
+        }
+      }, 1000);
+    }
     if (state.loggedIn && channelName !== "" && name && ready && tracks) {
       try {
         init(channelName);
@@ -273,6 +282,7 @@ const MeetingPage = () => {
           tracks[0].close();
         }
       } catch (error) {}
+      clearTimeout(timeoutId);
     };
   }, [state, channelName, rtc__client, ready, tracks]);
 
