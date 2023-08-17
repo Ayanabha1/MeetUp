@@ -350,7 +350,7 @@
   border: 1px solid black;
 }
 
-.meet-sidebar-chat::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none;
   /* Safari and Chrome */
 }

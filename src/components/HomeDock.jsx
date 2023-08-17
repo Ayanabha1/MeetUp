@@ -16,6 +16,9 @@ const HomeDock = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", appearSidebar);
+    return () => {
+      window.removeEventListener("scroll", appearSidebar);
+    };
   }, []);
 
   return (
@@ -49,7 +52,6 @@ const HomeDock = () => {
           <Stats />
           <Features />
           <Testimonials />
-          <Footer />
         </div>
       </div>
     </div>

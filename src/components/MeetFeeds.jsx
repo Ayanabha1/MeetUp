@@ -59,7 +59,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
       })}
 
       {tracks &&
-        (!tracks[1].muted ? (
+        (!tracks[1]?.muted ? (
           <div
             className={`min-w-[150px] max-w-[470px] sm:w-[48%] object-contain rounded-[7px] overflow-hidden relative`}
           >
@@ -67,7 +67,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
               videoTrack={tracks[1]}
               className="h-full w-full"
             />
-            {tracks[0].muted && (
+            {tracks[0]?.muted && (
               <img
                 className="absolute left-[10px] bottom-[10px] z-50 bg-[#FC5E5C] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                 src={micoff}
@@ -85,7 +85,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
               src={person2}
               className="w-[25%] h-[25%] object-cover rounded-[50%]"
             />
-            {tracks[0].muted && (
+            {tracks[0]?.muted && (
               <img
                 className="absolute left-[10px] bottom-[10px] z-50 bg-[#FC5E5C] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                 src={micoff}
@@ -144,7 +144,7 @@ const RenderOnSmallScreen = ({ tracks, participants, memberDetails, name }) => {
           <>
             <SpotLightFeed
               videoTrack={tracks && tracks[1]}
-              videoMuted={tracks && tracks[1].muted}
+              videoMuted={tracks && tracks[1]?.muted}
             />
             <span className="absolute right-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)] text-[12px] px-[5px] py-[2px] rounded-[5px]">
               {name} (You)

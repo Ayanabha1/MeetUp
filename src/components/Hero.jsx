@@ -5,34 +5,45 @@ import { her1_new } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
+import { Fade } from "react-reveal";
+import { Api } from "../Api/Axios";
 
 const Hero = () => {
   const [joinLink, setJoinLink] = useState("");
-  const { state, showError, showWarning } = useDataLayerValue();
+  const { state, showError, showWarning, startLoading, stopLoading } =
+    useDataLayerValue();
   const navigate = useNavigate();
-  const scrollToTop = () => {
-    console.log("first");
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
 
-  const generateRoomName = () => {
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    const alphanumeric = "0123456789abcdefghijklmnopqrstuvwxyz";
-
-    const randomChar = (characters) =>
-      characters.charAt(Math.floor(Math.random() * characters.length));
-
-    let randomString = randomChar(alphabet); // Start with an alphabet
-
-    for (let i = 0; i < 9; i++) {
-      // Append 9 more characters from the alphanumeric set
-      randomString += randomChar(alphanumeric);
+  const create_room = async () => {
+    startLoading();
+    if (!state.loggedIn) {
+      showWarning("User needs to be logged in");
+    } else {
+      await Api.get("/meet/create-meeting")
+        .then((res) => {
+          const meeting_id = res.data.meeting_id;
+          navigate(`/meet/${meeting_id}`);
+        })
+        .catch((err) => {
+          showError("Could not create the meeting");
+        });
     }
 
-    return randomString;
+    stopLoading();
+  };
+
+  const join_room = async (e) => {
+    e.preventDefault();
+    startLoading();
+    const trimmedLink = joinLink.trim();
+    if (!state.loggedIn) {
+      showWarning("User needs to be logged in");
+    } else if (trimmedLink !== "") {
+      navigate(`/meet/${trimmedLink}`);
+    } else {
+      showWarning("Please enter room id");
+    }
+    stopLoading();
   };
 
   return (
@@ -67,15 +78,7 @@ const Hero = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (!state.loggedIn) {
-              showWarning("User needs to be logged in");
-              return;
-            }
-            if (joinLink !== "") {
-              navigate(`/meet/${joinLink.trim()}`);
-            } else {
-              showWarning("Please enter room id");
-            }
+            join_room(e);
           }}
           className="flex flex-1 mt-10  items-center w-full mbl:flex-nowrap flex-wrap"
         >
@@ -96,13 +99,7 @@ const Hero = () => {
           <button
             type="button"
             className="home-create-btn font-poppin font-medium text-[16px] mx-[5px]"
-            onClick={() => {
-              if (!state.loggedIn) {
-                showWarning("User needs to be logged in");
-                return;
-              }
-              navigate(`/meet/${generateRoomName()}`);
-            }}
+            onClick={() => create_room()}
           >
             Create
           </button>
@@ -111,11 +108,14 @@ const Hero = () => {
       <div
         className={`flex-1 flex md:justify-end ${styles.flexCenter} md:mt-[0px] relative`}
       >
-        <img
-          src={her1_new}
-          alt="hero image"
-          className="w-[80%] h-[80%] relative z-[5]"
-        />
+        <Fade bottom distance="10%">
+          <img
+            src={her1_new}
+            alt="hero image"
+            className="w-[80%] h-[80%] relative z-[5]"
+          />
+        </Fade>
+
         <div className="absolute z-[0] w-[40%] h-[35%] top-0 pink__gradient " />
         <div className="absolute z-[0] w-[80%] h-[85%] bottom-40 rounded-full white__gradient " />
         <div className="absolute z-[0] w-[50%] h-[50%] bottom-20 right-20 blue__gradient " />

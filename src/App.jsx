@@ -12,15 +12,19 @@ import Loader from "./components/Loader";
 import { useDataLayerValue } from "./Datalayer/DataLayer";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorBoundary";
-
+import { useRef } from "react";
+import ProtectedRoute from "./Utils/ProtectedRoute";
+import ForNonLoggedIn from "./Utils/ForNonLoggedIn";
 const HomeDock = lazy(() => import("./components/HomeDock"));
 const MeetingPage = lazy(() => import("./components/MeetingPage"));
 
 const Login = lazy(() => import("./components/Login"));
 const Signup = lazy(() => import("./components/Signup"));
+const Profile = lazy(() => import("./components/Profile"));
 
 const App = () => {
   const { state, getUser } = useDataLayerValue();
+
   useEffect(() => {
     const token = localStorage.getItem("AUTH_TOKEN");
     getUser(token);
@@ -40,8 +44,31 @@ const App = () => {
               <Route exact path="/" element={<HomeDock />} />
 
               <Route path="/meet/:roomId" element={<MeetingPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/login"
+                element={
+                  <ForNonLoggedIn loggedIn={state.loggedIn}>
+                    <Login />
+                  </ForNonLoggedIn>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <ForNonLoggedIn loggedIn={state.loggedIn}>
+                    <Signup />
+                  </ForNonLoggedIn>
+                }
+              />
+
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute loggedIn={state.loggedIn}>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </Suspense>
         </ErrorBoundary>

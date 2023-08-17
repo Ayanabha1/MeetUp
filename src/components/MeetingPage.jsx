@@ -10,7 +10,8 @@ import {
   useRTMClient,
 } from "./commSettings";
 import MeetControls from "./MeetControls";
-import AgoraRTM from "agora-rtm-react";
+import socketIOClient from "socket.io-client";
+import { Api } from "../Api/Axios";
 
 const MeetingPage = () => {
   // agora variables and functions
@@ -20,6 +21,7 @@ const MeetingPage = () => {
   const [participants, setParticipants] = useState([]);
   const rtc__client = useRTCClient();
   const rtm__client = useRTMClient();
+  const [connectionEstablished, setConnectionEstablished] = useState(false);
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const [uid, setUid] = useState(String(Math.floor(Math.random() * 10000)));
   const { state, startLoading, stopLoading, showError, showSuccess, showInfo } =
@@ -31,16 +33,105 @@ const MeetingPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [duration, setDuration] = useState(0);
   const urlParams = useParams();
+  const socketRef = useRef();
 
-  useEffect(() => {
-    setChannelName(urlParams?.roomId);
-  }, [urlParams]);
+  const init = async (roomName) => {
+    // RTM
+
+    try {
+      await rtm__client.login({ uid });
+      await rtm__client.addOrUpdateLocalUserAttributes({
+        name: name,
+        uid: uid,
+      });
+      let channel = await rtm__client.createChannel(roomName);
+      channelRef.current = channel;
+      await channelRef.current.join();
+
+      channelRef.current.on("MemberJoined", handleMemberJoined);
+      channelRef.current.on("MemberLeft", handleMemberLeft);
+      channelRef.current.on("ChannelMessage", handleRecieveMessage);
+      getAllMemberDetails();
+    } catch (err) {
+      console.log(err);
+    }
+
+    // RTC
+
+    rtc__client.on("user-published", async (user, mediaType) => {
+      await rtc__client.subscribe(user, mediaType);
+      if (mediaType === "video") {
+        if (participants.filter((p) => p.uid === user.uid)) {
+          setParticipants((prevParts) =>
+            prevParts.filter((p) => p.uid !== user.uid)
+          );
+        }
+        setParticipants((prevParts) => [...prevParts, user]);
+      }
+      if (mediaType === "audio") {
+        user.audioTrack.play();
+      }
+    });
+
+    rtc__client.on("user-unpublished", (user, mediaType) => {
+      if (mediaType === "audio") {
+        if (user.audioTrack) {
+          user.audioTrack.stop();
+        }
+        if (mediaType === "video") {
+          setParticipants((prevParts) =>
+            prevParts.filter((p) => p.uid !== user.uid)
+          );
+        }
+      }
+    });
+
+    rtc__client.on("user-left", async (user) => {
+      await handleMemberLeft(user.uid);
+      setParticipants((prevParts) =>
+        prevParts.filter((p) => p.uid !== user.uid)
+      );
+    });
+
+    try {
+      await rtc__client?.join(config.APP_ID, roomName, config.token, uid);
+    } catch (err) {
+      console.log(err);
+    }
+
+    if (tracks) {
+      await rtc__client.publish([tracks[0], tracks[1]]);
+    }
+    setStart(true);
+  };
+
+  const createSocketConnection = async (room_id) => {
+    // startLoading();
+    const uid = state?.userData?._id;
+    const baseURL = import.meta.env.VITE_SOCKET_URL;
+    await Api.post("/meet/join-meeting", { meeting_id: room_id })
+      .then((res) => {
+        const session_token = res.data.session_token;
+        socketRef.current = socketIOClient(baseURL);
+        socketRef.current.emit("join-meeting", uid, session_token);
+        setConnectionEstablished(true);
+      })
+      .catch((err) => {
+        navigate("/");
+        showError(err?.response?.data?.message);
+      });
+    // stopLoading();
+  };
 
   useEffect(() => {
     if (state.loggedIn) {
       setName(state?.userData?.name);
     }
   }, [state.loggedIn]);
+
+  useEffect(() => {
+    setChannelName(urlParams?.roomId);
+  }, [urlParams]);
 
   const getTime = () => {
     const d = new Date();
@@ -183,76 +274,6 @@ const MeetingPage = () => {
   };
 
   useEffect(() => {
-    let init = async (roomName) => {
-      // RTM
-
-      try {
-        await rtm__client.login({ uid });
-        await rtm__client.addOrUpdateLocalUserAttributes({
-          name: name,
-          uid: uid,
-        });
-        let channel = await rtm__client.createChannel(roomName);
-        channelRef.current = channel;
-        await channelRef.current.join();
-
-        channelRef.current.on("MemberJoined", handleMemberJoined);
-        channelRef.current.on("MemberLeft", handleMemberLeft);
-        channelRef.current.on("ChannelMessage", handleRecieveMessage);
-        getAllMemberDetails();
-      } catch (err) {
-        console.log(err);
-      }
-
-      // RTC
-
-      rtc__client.on("user-published", async (user, mediaType) => {
-        await rtc__client.subscribe(user, mediaType);
-        if (mediaType === "video") {
-          if (participants.filter((p) => p.uid === user.uid)) {
-            setParticipants((prevParts) =>
-              prevParts.filter((p) => p.uid !== user.uid)
-            );
-          }
-          setParticipants((prevParts) => [...prevParts, user]);
-        }
-        if (mediaType === "audio") {
-          user.audioTrack.play();
-        }
-      });
-
-      rtc__client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "audio") {
-          if (user.audioTrack) {
-            user.audioTrack.stop();
-          }
-          if (mediaType === "video") {
-            setParticipants((prevParts) =>
-              prevParts.filter((p) => p.uid !== user.uid)
-            );
-          }
-        }
-      });
-
-      rtc__client.on("user-left", async (user) => {
-        await handleMemberLeft(user.uid);
-        setParticipants((prevParts) =>
-          prevParts.filter((p) => p.uid !== user.uid)
-        );
-      });
-
-      try {
-        await rtc__client?.join(config.APP_ID, roomName, config.token, uid);
-      } catch (err) {
-        console.log(err);
-      }
-
-      if (tracks) {
-        await rtc__client.publish([tracks[0], tracks[1]]);
-      }
-      setStart(true);
-    };
-
     let timeoutId;
     if (!state.loggedIn) {
       timeoutId = setTimeout(() => {
@@ -265,6 +286,9 @@ const MeetingPage = () => {
     if (state.loggedIn && channelName !== "" && name && ready && tracks) {
       try {
         init(channelName);
+        if (!connectionEstablished) {
+          createSocketConnection(channelName);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -281,6 +305,7 @@ const MeetingPage = () => {
           tracks[0].stop();
           tracks[0].close();
         }
+        socketRef.current.disconnect();
       } catch (error) {}
       clearTimeout(timeoutId);
     };

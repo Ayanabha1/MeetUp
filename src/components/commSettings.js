@@ -5,7 +5,7 @@ import AgoraRTC, {
 
 import AgoraRTM, { createClient as CREATERTMCLIENT } from "agora-rtm-react";
 
-const APP_ID = import.meta.env.VITE_AGORA_APP_ID;
+const APP_ID = import.meta.env.VITE_AGORA_APP_ID || window.AGORA_APP_ID;
 const roomId = "main";
 const token = null;
 
