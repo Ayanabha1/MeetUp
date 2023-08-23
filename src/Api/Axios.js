@@ -3,7 +3,14 @@ const baseURL = import.meta.env.VITE_API_URL || window.API_URL;
 
 let Api = axios.create({
   baseURL: baseURL,
-  headers: { Authorization: `Bearer ${localStorage.getItem("AUTH_TOKEN")}` },
+  withCredentials: false,
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("AUTH_TOKEN")}`,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "*",
+    Accept: "*/*",
+  },
 });
 
 let resetApiHeaders = (token) => {
