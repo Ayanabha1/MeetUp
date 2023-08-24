@@ -33,7 +33,6 @@ const MeetingPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [duration, setDuration] = useState(0);
   const urlParams = useParams();
-  const socketRef = useRef();
 
   const init = async (roomName) => {
     // RTM
@@ -112,8 +111,17 @@ const MeetingPage = () => {
     await Api.post("/meet/join-meeting", { meeting_id: room_id })
       .then((res) => {
         const session_token = res.data.session_token;
-        socketRef.current = socketIOClient(baseURL);
-        socketRef.current.emit("join-meeting", uid, session_token);
+        const newSocket = new WebSocket("ws://localhost:3001");
+        newSocket.onopen = () => {
+          console.log("Connection established");
+          const data = {
+            action: "addConnection",
+            user_id: uid,
+            session_token: session_token,
+          };
+          newSocket.send(JSON.stringify(data));
+          socketRef.current = newSocket;
+        };
         setConnectionEstablished(true);
       })
       .catch((err) => {
@@ -305,7 +313,7 @@ const MeetingPage = () => {
           tracks[0].stop();
           tracks[0].close();
         }
-        socketRef.current.disconnect();
+        socketRef.current.close();
       } catch (error) {}
       clearTimeout(timeoutId);
     };

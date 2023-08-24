@@ -3,15 +3,10 @@ import { useDataLayerValue } from "../Datalayer/DataLayer";
 import { person2 } from "../assets";
 import { Api } from "../Api/Axios";
 
-const MeetHistoryCard = ({
-  meeting_id,
-  start_time,
-  end_time,
-  participants,
-}) => {
+const MeetHistoryCard = ({ meeting_id, start_time }) => {
   const getDate = (date) => {
     const d = new Date(date);
-    return `${d.getDate()}-${d.getMonth()}-${d.getFullYear()}`;
+    return `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
   };
 
   const formatTime = (date) => {
@@ -24,17 +19,17 @@ const MeetHistoryCard = ({
       .padStart(2, "0")}`;
   };
 
-  const getDuration = (st, end) => {
-    const s = new Date(st),
-      e = new Date(end);
-    const td = e - s;
-    const hours = Math.floor(td / (1000 * 60 * 60));
-    const minutes = Math.floor((td % (1000 * 60 * 60)) / (1000 * 60));
-    if (hours > 0) {
-      return `${hours} hrs ${minutes} mins`;
-    }
-    return `${minutes} mins`;
-  };
+  // const getDuration = (st, end) => {
+  //   const s = new Date(st),
+  //     e = new Date(end);
+  //   const td = e - s;
+  //   const hours = Math.floor(td / (1000 * 60 * 60));
+  //   const minutes = Math.floor((td % (1000 * 60 * 60)) / (1000 * 60));
+  //   if (hours > 0) {
+  //     return `${hours} hrs ${minutes} mins`;
+  //   }
+  //   return `${minutes} mins`;
+  // };
 
   return (
     <div
@@ -42,20 +37,14 @@ const MeetHistoryCard = ({
       style={{ boxShadow: "1px 1px 10px rgba(255,255,255,0.15)" }}
     >
       <div className="flex flex-col gap-[2px] text-left">
-        <span>Meeting code :</span>
-        <span>Date :</span>
-        <span>Start time :</span>
-        <span>End time :</span>
-        <span>Duration :</span>
-        <span>Participants :</span>
+        <span>Meeting code </span>
+        <span>Date </span>
+        <span>Start time </span>
       </div>
       <div className="flex flex-col gap-[2px] text-right">
         <span>{meeting_id}</span>
         <span>{getDate(start_time)}</span>
         <span>{formatTime(start_time)}</span>
-        <span>{formatTime(end_time)}</span>
-        <span>{getDuration(start_time, end_time)}</span>
-        <span>{participants}</span>
       </div>
     </div>
   );
@@ -116,10 +105,9 @@ const Profile = () => {
         <hr className="m-2 border-[rgba(255,255,255,0.25)]" />
 
         <div className="overflow-scroll h-[90%] relative">
-          {meetings?.map(
-            (meeting, i) =>
-              meeting?.end_time && <MeetHistoryCard key={i} {...meeting} />
-          )}
+          {meetings?.map((meeting, i) => (
+            <MeetHistoryCard key={i} {...meeting} />
+          ))}
           <div
             className="w-full h-[20px] sticky bottom-0"
             style={{
