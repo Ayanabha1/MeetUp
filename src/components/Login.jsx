@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
+import { useEffect } from "react";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({});
@@ -20,6 +21,10 @@ const Login = () => {
       console.log("Error in login ... Try again");
     }
   };
+
+  useEffect(() => {
+    document.title = "Login - Meetup";
+  }, []);
 
   return (
     <div className="flex bg-primary w-[100vw] h-[100vh] overflow-hidden justify-center items-center relative ">
@@ -72,7 +77,7 @@ const Login = () => {
             type="submit"
             className="my-7 btn-blue-gradient p-2 text-[black] font-semibold rounded-[5px] cursor-pointer"
           >
-            Sign in
+            Login
           </button>
         </form>
       </div>

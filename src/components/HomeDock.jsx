@@ -15,7 +15,9 @@ const HomeDock = () => {
   };
 
   useEffect(() => {
+    document.title = "Meetup - Conquer Together";
     window.addEventListener("scroll", appearSidebar);
+
     return () => {
       window.removeEventListener("scroll", appearSidebar);
     };

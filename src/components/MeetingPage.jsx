@@ -10,7 +10,6 @@ import {
   useRTMClient,
 } from "./commSettings";
 import MeetControls from "./MeetControls";
-import socketIOClient from "socket.io-client";
 import { Api } from "../Api/Axios";
 
 const MeetingPage = () => {
@@ -21,7 +20,7 @@ const MeetingPage = () => {
   const [participants, setParticipants] = useState([]);
   const rtc__client = useRTCClient();
   const rtm__client = useRTMClient();
-  const [connectionEstablished, setConnectionEstablished] = useState(false);
+  // const [connectionEstablished, setConnectionEstablished] = useState(false);
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const [uid, setUid] = useState(String(Math.floor(Math.random() * 10000)));
   const { state, startLoading, stopLoading, showError, showSuccess, showInfo } =
@@ -68,7 +67,7 @@ const MeetingPage = () => {
         setParticipants((prevParts) => [...prevParts, user]);
       }
       if (mediaType === "audio") {
-        user.audioTrack.play();
+        user?.audioTrack?.play();
       }
     });
 
@@ -104,32 +103,32 @@ const MeetingPage = () => {
     setStart(true);
   };
 
-  const createSocketConnection = async (room_id) => {
-    // startLoading();
-    const uid = state?.userData?._id;
-    const baseURL = import.meta.env.VITE_SOCKET_URL;
-    await Api.post("/meet/join-meeting", { meeting_id: room_id })
-      .then((res) => {
-        const session_token = res.data.session_token;
-        const newSocket = new WebSocket("ws://localhost:3001");
-        newSocket.onopen = () => {
-          console.log("Connection established");
-          const data = {
-            action: "addConnection",
-            user_id: uid,
-            session_token: session_token,
-          };
-          newSocket.send(JSON.stringify(data));
-          socketRef.current = newSocket;
-        };
-        setConnectionEstablished(true);
-      })
-      .catch((err) => {
-        navigate("/");
-        showError(err?.response?.data?.message);
-      });
-    // stopLoading();
-  };
+  // const createSocketConnection = async (room_id) => {
+  //   // startLoading();
+  //   const uid = state?.userData?._id;
+  //   const baseURL = import.meta.env.VITE_SOCKET_URL;
+  //   await Api.post("/meet/join-meeting", { meeting_id: room_id })
+  //     .then((res) => {
+  //       const session_token = res.data.session_token;
+  //       const newSocket = new WebSocket("ws://localhost:3001");
+  //       newSocket.onopen = () => {
+  //         console.log("Connection established");
+  //         const data = {
+  //           action: "addConnection",
+  //           user_id: uid,
+  //           session_token: session_token,
+  //         };
+  //         newSocket.send(JSON.stringify(data));
+  //         socketRef.current = newSocket;
+  //       };
+  //       setConnectionEstablished(true);
+  //     })
+  //     .catch((err) => {
+  //       navigate("/");
+  //       showError(err?.response?.data?.message);
+  //     });
+  //   // stopLoading();
+  // };
 
   useEffect(() => {
     if (state.loggedIn) {
@@ -294,9 +293,9 @@ const MeetingPage = () => {
     if (state.loggedIn && channelName !== "" && name && ready && tracks) {
       try {
         init(channelName);
-        if (!connectionEstablished) {
-          createSocketConnection(channelName);
-        }
+        // if (!connectionEstablished) {
+        //   createSocketConnection(channelName);
+        // }
       } catch (err) {
         console.log(err);
       }
@@ -313,7 +312,7 @@ const MeetingPage = () => {
           tracks[0].stop();
           tracks[0].close();
         }
-        socketRef.current.close();
+        // socketRef.current.close();
       } catch (error) {}
       clearTimeout(timeoutId);
     };
@@ -333,7 +332,12 @@ const MeetingPage = () => {
             />
           </Link>
           <div className="h-[80%] w-[1px] bg-dimWhite ml-5 mr-5"></div>
-          <span className="text-[14px] xs:text-[16px]">Very Good Meeting</span>
+          <span className="text-[14px] xs:text-[14px] hidden sm:block">
+            Very Good Meeting
+          </span>
+          <span className="sm:hidden text-[14px] xs:text-[16px]">
+            {channelName}
+          </span>
           <div className="w-fit bg-[rgba(255,255,255,0.2)] px-3 py-1 ml-auto ss:ml-5 rounded-xl text-[14px] xs:text-[16px]">
             {formatTime(duration)}
           </div>
@@ -395,14 +399,14 @@ const MeetingPage = () => {
                             alt="name"
                             className="w-[42px] h-[42px] object-cover rounded-[5px]"
                           />
-                          <div className="flex flex-col w-full mr-4">
+                          <div className="flex flex-col mr-4 w-[83%]">
                             <div className="flex flex-row-reverse justify-between">
                               <span className="text-dimWhite">You</span>
                               <span className="text-[rgb(131,132,138)]">
                                 {chat?.time}
                               </span>
                             </div>
-                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tr-none my-3 p-3">
+                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tr-none my-3 p-3 text-end overflow-auto">
                               {chat?.message}
                             </p>
                           </div>
@@ -428,7 +432,7 @@ const MeetingPage = () => {
                                 {chat?.time}
                               </span>
                             </div>
-                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tl-none my-3 p-3">
+                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tl-none my-3 p-3 text-start overflow-auto">
                               {chat?.message}
                             </p>
                           </div>

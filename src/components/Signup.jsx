@@ -22,6 +22,9 @@ const Signup = () => {
       console.log("Error in signup ... Try again");
     }
   };
+  useEffect(() => {
+    document.title = "Signup - Meetup";
+  }, []);
 
   return (
     <div className="flex bg-primary w-[100vw] h-[100vh] overflow-hidden justify-center items-center relative ">
@@ -80,7 +83,7 @@ const Signup = () => {
           <span className="text-[rgb(179,180,183)]">
             Already have an account?{" "}
             <Link to="/login" className=" font-semibold text-white underline">
-              Signin
+              Login
             </Link>
           </span>
           <button

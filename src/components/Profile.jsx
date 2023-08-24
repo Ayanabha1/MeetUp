@@ -70,6 +70,14 @@ const Profile = () => {
     getMeetingHistory();
   }, []);
 
+  useEffect(() => {
+    let first_name = undefined;
+    if (state.userData) {
+      first_name = state.userData.name.split(" ")[0];
+    }
+    document.title = `${first_name} - Meetup profile`;
+  }, [state.userData]);
+
   return (
     <div className="bg-[rgba(0,4,15)] w-[100vw] h-[100vh] overflow-scroll flex flex-col items-center p-10 text-white gap-6 text-[15px] ss:text-[18px]  ">
       <div

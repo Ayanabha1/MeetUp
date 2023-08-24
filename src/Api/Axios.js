@@ -13,17 +13,17 @@ let Api = axios.create({
   },
 });
 
-Api.interceptors.response.use(
-  (response) => {
-    if (response.headers["content-type"] === "application/json") {
-      response.data = JSON.parse(response.data);
-    }
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// Api.interceptors.response.use(
+//   (response) => {
+//     if (response.headers["content-type"] === "application/json") {
+//       response.data = JSON.parse(response.data);
+//     }
+//     return response;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 let resetApiHeaders = (token) => {
   if (!token || token === "") {
