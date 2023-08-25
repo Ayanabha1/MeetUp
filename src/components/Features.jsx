@@ -35,7 +35,7 @@ const Features = () => {
     <section id="features" className={`${layout.section}`}>
       <div className={`${layout.sectionInfo}`}>
         <h2 className={styles.heading2}>
-          You build relations, <br /> While we handle the connections.
+          You build relations, <br /> We'll handle connections.
         </h2>
         <p className={`${styles.paragraph} max-w-[600px] mt-5`}>
           At Meetup, we harness the power of seamless video calls to unite

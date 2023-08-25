@@ -20,7 +20,7 @@ const MeetingPage = () => {
   const [participants, setParticipants] = useState([]);
   const rtc__client = useRTCClient();
   const rtm__client = useRTMClient();
-  // const [connectionEstablished, setConnectionEstablished] = useState(false);
+  const [connectionEstablished, setConnectionEstablished] = useState(false);
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const [uid, setUid] = useState(String(Math.floor(Math.random() * 10000)));
   const { state, startLoading, stopLoading, showError, showSuccess, showInfo } =
@@ -130,6 +130,21 @@ const MeetingPage = () => {
   //   // stopLoading();
   // };
 
+  const joinMeeting = async (room_id) => {
+    // startLoading();
+    console.log("In route");
+
+    await Api.post("/meet/join-meeting", { meeting_id: room_id })
+      .then((res) => {
+        setConnectionEstablished(true);
+      })
+      .catch((err) => {
+        navigate("/");
+        showError(err?.response?.data?.message);
+      });
+    // stopLoading();
+  };
+
   useEffect(() => {
     if (state.loggedIn) {
       setName(state?.userData?.name);
@@ -212,11 +227,11 @@ const MeetingPage = () => {
   }, []);
 
   const handleMemberJoined = async (MemberId) => {
-    console.log("New member : " + MemberId);
     let { name, uid } = await rtm__client.getUserAttributesByKeys(MemberId, [
       "name",
       "uid",
     ]);
+    showInfo(`${name} joined the call`);
     setMemberDetails((prev) => [...prev, { name, uid }]);
   };
 
@@ -292,10 +307,11 @@ const MeetingPage = () => {
     }
     if (state.loggedIn && channelName !== "" && name && ready && tracks) {
       try {
+        if (!connectionEstablished) {
+          console.log("Hit route");
+          joinMeeting(channelName);
+        }
         init(channelName);
-        // if (!connectionEstablished) {
-        //   createSocketConnection(channelName);
-        // }
       } catch (err) {
         console.log(err);
       }

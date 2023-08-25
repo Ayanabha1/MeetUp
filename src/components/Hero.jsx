@@ -39,7 +39,13 @@ const Hero = () => {
     if (!state.loggedIn) {
       showWarning("User needs to be logged in");
     } else if (trimmedLink !== "") {
-      navigate(`/meet/${trimmedLink}`);
+      await Api.post("/meet/check-meeting-exists", { meeting_id: trimmedLink })
+        .then((res) => {
+          navigate(`/meet/${trimmedLink}`);
+        })
+        .catch((err) => {
+          showError("Invalid meeting id");
+        });
     } else {
       showWarning("Please enter room id");
     }
