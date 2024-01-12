@@ -16,7 +16,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
           return (
             <>
               <div
-                className={`min-w-[150px] max-w-[470px] sm:w-[48%] object-contain rounded-[7px] overflow-hidden relative`}
+                className={`bg-[rgba(255,255,255,0.2)_!important] min-w-[150px] max-w-[470px] sm:w-[48%] object-contain rounded-[7px] overflow-hidden relative`}
               >
                 <AgoraVideoPlayer
                   videoTrack={participant.videoTrack}
@@ -25,7 +25,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
                 />
                 {memberDetails.mic__muted && (
                   <img
-                    className="absolute left-[10px] bottom-[10px] z-50 bg-[#FC5E5C] w-[30px] h-[30px] p-[5px] rounded-[50%]"
+                    className="absolute left-[10px] bottom-[10px] z-50 bg-[rgb(217,84,58)] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                     src={micoff}
                   />
                 )}
@@ -38,7 +38,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
         } else {
           return (
             <div
-              className={`min-w-[150px] max-w-[470px] sm:w-[48%] object-contain flex justify-center items-center bg-black rounded-[7px] overflow-hidden relative`}
+              className={`bg-[rgba(255,255,255,0.2)_!important] min-w-[150px] max-w-[470px] sm:w-[48%] object-contain flex justify-center items-center bg-black rounded-[7px] overflow-hidden relative`}
             >
               <img
                 src={person1}
@@ -46,7 +46,7 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
               />
               {memberDetails.mic__muted && (
                 <img
-                  className="absolute left-[10px] bottom-[10px] z-50 bg-[#FC5E5C] w-[30px] h-[30px] p-[5px] rounded-[50%]"
+                  className="absolute left-[10px] bottom-[10px] z-50 bg-[rgb(217,84,58)] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                   src={micoff}
                 />
               )}
@@ -61,62 +61,43 @@ const RenderOnBigScreen = ({ tracks, participants, memberDetails, name }) => {
       {tracks &&
         (!tracks[1]?.muted ? (
           <div
-            className={`min-w-[150px] max-w-[470px] sm:w-[48%] object-contain rounded-[7px] overflow-hidden relative`}
+            className={`bg-[rgba(255,255,255,0.2)_!important] min-w-[150px] max-w-[470px] sm:w-[48%] object-contain rounded-[7px] overflow-hidden relative`}
           >
-            <AgoraVideoPlayer
+            {/* <AgoraVideoPlayer
               videoTrack={tracks[1]}
               className="h-full w-full"
             />
             {tracks[0]?.muted && (
               <img
-                className="absolute left-[10px] bottom-[10px] z-50 bg-[#FC5E5C] w-[30px] h-[30px] p-[5px] rounded-[50%]"
+                className="absolute left-[10px] bottom-[10px] z-50 bg-[rgb(217,84,58)] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                 src={micoff}
               />
             )}
             <span className="absolute right-[10px] bottom-[10px]  text-black font-semibold bg-[rgba(255,255,255,0.3)]  px-[12px] py-[2px] rounded-[8px]">
               {name} (You)
-            </span>
+            </span> */}
           </div>
         ) : (
           <div
-            className={`min-w-[150px] max-w-[470px] sm:w-[48%] object-contain flex justify-center items-center bg-black rounded-[7px] overflow-hidden relative`}
+            className={`bg-[rgba(255,255,255,0.2)_!important] min-w-[150px] max-w-[470px] sm:w-[48%] object-contain flex justify-center items-center bg-black rounded-[7px] overflow-hidden relative`}
           >
-            <img
+            {/* <img
               src={person2}
               className="w-[25%] h-[25%] object-cover rounded-[50%]"
             />
             {tracks[0]?.muted && (
               <img
-                className="absolute left-[10px] bottom-[10px] z-50 bg-[#FC5E5C] w-[30px] h-[30px] p-[5px] rounded-[50%]"
+                className="absolute left-[10px] bottom-[10px] z-50 bg-[rgb(217,84,58)] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                 src={micoff}
               />
             )}
             <span className="absolute right-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)]  px-[12px] py-[2px] rounded-[8px]">
               {name} (You)
-            </span>
+            </span> */}
           </div>
         ))}
     </div>
   );
-};
-
-const SpotLightFeed = ({ videoTrack, videoMuted }) => {
-  if (!videoMuted && videoTrack) {
-    return (
-      <AgoraVideoPlayer videoTrack={videoTrack} className={`h-full w-full`} />
-    );
-  } else {
-    return (
-      <div
-        className={`h-full w-full object-contain flex justify-center items-center overflow-hidden`}
-      >
-        <img
-          src={person2}
-          className="w-[25%] h-[25%] object-cover rounded-[50%]"
-        />
-      </div>
-    );
-  }
 };
 
 const RenderOnSmallScreen = ({ tracks, participants, memberDetails, name }) => {

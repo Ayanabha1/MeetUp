@@ -288,7 +288,7 @@
   overflow: hidden;
   color: rgba(255, 255, 255, 0.8);
   font-family: poppins;
-  padding: 20px;
+  padding: 5px;
 }
 
 .meet-top {
@@ -320,16 +320,16 @@
 }
 
 .meet-control-icon-off {
-  background-color: #FC5E5C !important;
+  background-color: rgb(217, 84, 58) !important;
 
 }
 
 .meet-end-btn {
-  background-color: #FC5E5C;
+  background-color: rgb(217, 84, 58);
 }
 
 .meet-end-btn img {
-  background-color: #FC5E5C;
+  background-color: rgb(217, 84, 58);
 }
 
 @media only screen and (max-width:480px) {

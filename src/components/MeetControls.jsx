@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import {
-  chat2,
-  endcall,
-  fullscreen,
-  micoff,
-  micon,
-  videoff,
-  videon,
-} from "../assets";
+  MicOff,
+  Mic,
+  VideoOff,
+  Video,
+  LogOut,
+  MessageCircle,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -50,43 +50,61 @@ const MeetControls = ({ toggleChat, tracks, channelRef, uid }) => {
     navigate("/");
   };
 
+  const controls = [
+    {
+      name: "mic",
+      iconOn: Mic,
+      iconOff: MicOff,
+      action: toggleMicrophone,
+      state: microphoneOn,
+    },
+    {
+      name: "video",
+      iconOn: Video,
+      iconOff: VideoOff,
+      action: toggleCamera,
+      state: cameraOn,
+    },
+    {
+      name: "chat",
+      iconOn: MessageCircle,
+      iconOff: MessageCircle,
+      action: toggleChat,
+      state: true,
+    },
+    {
+      name: "participants",
+      iconOn: Users,
+      iconOff: Users,
+      action: () => {},
+      state: true,
+    },
+    {
+      name: "leave",
+      iconOn: LogOut,
+      iconOff: LogOut,
+      action: leaveRoom,
+      state: true,
+    },
+  ];
+
   return (
-    <div className="flex-[0.05] flex justify-center relative">
-      <div className="meetcode absolute left-0 bottom-[50%] translate-y-[50%] bg-[#2E3137] px-4 py-2 rounded-[8px] -z-10 hidden sm:block  sm:z-10 ">
-        Room Id : {roomId}
-      </div>
-      <div className="flex w-[80%] items-center justify-center">
-        <div
-          className={`meet-control-icon ${
-            !cameraOn && "meet-control-icon-off"
-          } `}
-          onClick={() => toggleCamera()}
+    <div className="rounded-xl p-3 xs:backdrop-blur-[5px] bg-[rgb(246,246,246)] bg-opacity-20 xs:bg-black xs:bg-opacity-[8%]  border border-[rgba(255,255,255,0.25)] w-full xs:w-fit flex gap-2 justify-center z-[15] ">
+      {controls?.map((control, i) => (
+        <button
+          key={i}
+          className={`p-2 rounded-full bg-[rgba(255,255,255,0.3)] backdrop-blur-[8px] transition-all duration-300 ${
+            !control.state && "bg-[rgb(217,84,58)_!important]"
+          }`}
+          onClick={control?.action}
         >
-          <img src={cameraOn ? videon : videoff}></img>
-        </div>
-        <div
-          className={`meet-control-icon ${
-            !microphoneOn && "meet-control-icon-off"
-          } `}
-          onClick={() => toggleMicrophone()}
-        >
-          <img src={microphoneOn ? micon : micoff}></img>
-        </div>
-
-        <div
-          className="meet-control-icon meet-end-btn"
-          onClick={() => leaveRoom()}
-        >
-          <img src={endcall}></img>
-        </div>
-
-        <div className="meet-control-icon">
-          <img src={fullscreen}></img>
-        </div>
-        <div className="meet-control-icon" onClick={() => toggleChat()}>
-          <img src={chat2}></img>
-        </div>
-      </div>
+          {control?.state ? (
+            <control.iconOn className="h-9 w-9 rounded-full bg-transparent" />
+          ) : (
+            <control.iconOff className="h-9 w-9 rounded-full bg-transparent" />
+          )}
+        </button>
+      ))}
     </div>
   );
 };

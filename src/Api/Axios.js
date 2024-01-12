@@ -34,7 +34,13 @@ let resetApiHeaders = (token) => {
   }
   Api = axios.create({
     baseURL: baseURL,
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+      Accept: "*/*",
+    },
   });
 };
 

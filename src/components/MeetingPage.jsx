@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { logo, person2, person3, cancel } from "../assets";
+import {
+  micoff,
+  user,
+  logo,
+  person1,
+  person2,
+  person3,
+  cancel,
+} from "../assets";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import MeetFeeds from "./MeetFeeds";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
@@ -11,6 +19,12 @@ import {
 } from "./commSettings";
 import MeetControls from "./MeetControls";
 import { Api } from "../Api/Axios";
+import { AgoraVideoPlayer } from "agora-rtc-react";
+import { Clock10 } from "lucide-react";
+import ChatPortal from "./ChatPortal";
+import { MeetingOverlay } from "./MeetingOverlay";
+import RenderOnBigScreen from "./RenderOnBigScreen";
+import RenderOnSmallScreen from "./RenderOnSmallScreen";
 
 const MeetingPage = () => {
   // agora variables and functions
@@ -272,8 +286,12 @@ const MeetingPage = () => {
     }
   };
 
+  const handleChangeMessage = (message) => {
+    setNewMessage(message);
+  };
+
   const sendMessage = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (newMessage === "") {
       return;
     }
@@ -288,11 +306,10 @@ const MeetingPage = () => {
       picture: "",
       message: __message,
     };
-
     setChats((chats) => [...chats, newChat]);
     channelRef.current.sendMessage({ text: JSON.stringify(newChat) });
-
-    setNewMessage("");
+    handleChangeMessage("");
+    // console.log("first");
   };
 
   useEffect(() => {
@@ -335,153 +352,42 @@ const MeetingPage = () => {
   }, [state, channelName, rtc__client, ready, tracks]);
 
   return (
-    <div className="meeting-dock bg-primary w-full h-full overflow-hidden">
-      <div className="flex flex-1 flex-col h-full">
-        {/* Top portion  */}
-
-        <div className="meet-top flex-[0.05] flex items-center">
-          <Link to="/">
-            <img
-              src={logo}
-              alt="meetup"
-              className="w-[90px] xs:w-[124px] xs:h-[45px]"
-            />
-          </Link>
-          <div className="h-[80%] w-[1px] bg-dimWhite ml-5 mr-5"></div>
-          <span className="text-[14px] xs:text-[14px] hidden sm:block">
-            Very Good Meeting
-          </span>
-          <span className="sm:hidden text-[14px] xs:text-[16px]">
-            {channelName}
-          </span>
-          <div className="w-fit bg-[rgba(255,255,255,0.2)] px-3 py-1 ml-auto ss:ml-5 rounded-xl text-[14px] xs:text-[16px]">
-            {formatTime(duration)}
-          </div>
-          <span className="ml-0 ss:ml-auto hidden ss:block ">
-            {getTime()} | {getDate()}
-          </span>
-        </div>
-
-        {/* Bottom portion */}
-
-        <div className="flex-[0.95] flex w-full h-[89%] relative">
-          {/* Bottom left portion */}
-
-          <div
-            className={`flex flex-col  ${
-              chatOpen ? "w-[100%] sm:w-[80%]" : "w-[100%]"
-            }`}
-          >
-            <div className="flex-[0.95] flex justify-center overflow-hidden ">
-              <MeetFeeds
-                tracks={tracks}
-                participants={participants}
-                rtc__client={rtc__client}
-                memberDetails={memberDetails}
-                name={name}
-              />
-            </div>
-            {/* Meeting controls */}
-            <MeetControls
-              toggleChat={toggleChat}
-              tracks={tracks}
-              channelRef={channelRef}
-              uid={uid}
-            />
-          </div>
-
-          {/* Meet sidebar */}
-          {chatOpen && (
-            <div className="meet-sidebar w-full flex flex-col justify-between bg-[rgb(24,24,35,0.75)] backdrop-blur-[3px] sm:bg-[rgba(24,24,35,0.2)] rounded-[8px] sm:w-[400px] h-[100%] absolute sm:static">
-              {/* Chat section */}
-              <div className="meet-sidebar-chat  flex-[0.88] overflow-y-scroll relative">
-                <div
-                  className="absolute right-5 top-3 block sm:hidden"
-                  onClick={() => toggleChat()}
-                >
-                  <img src={cancel} className="w-[25px]" />
-                </div>
-                <p className="text-center my-3 mx-5 underline underline-offset-8">
-                  Messages
-                </p>
-                {chats?.map((chat, i) => {
-                  if (chat?.uid === uid) {
-                    // user's message
-                    return (
-                      <div className="flex flex-col p-5" key={chat?.uid}>
-                        <div className="flex flex-row-reverse">
-                          <img
-                            src={person3}
-                            alt="name"
-                            className="w-[42px] h-[42px] object-cover rounded-[5px]"
-                          />
-                          <div className="flex flex-col mr-4 w-[83%]">
-                            <div className="flex flex-row-reverse justify-between">
-                              <span className="text-dimWhite">You</span>
-                              <span className="text-[rgb(131,132,138)]">
-                                {chat?.time}
-                              </span>
-                            </div>
-                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tr-none my-3 p-3 text-end overflow-auto">
-                              {chat?.message}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  } else {
-                    // other's message
-                    return (
-                      <div className="flex flex-col p-5 " key={i}>
-                        <div className="flex">
-                          <img
-                            src={person2}
-                            alt="name"
-                            className="w-[42px] h-[42px] object-cover rounded-[5px]"
-                          />
-                          <div className="flex flex-col w-full ml-4">
-                            <div className="flex justify-between">
-                              <span className="text-dimWhite">
-                                {chat?.name}
-                              </span>
-                              <span className="text-[rgb(131,132,138)]">
-                                {chat?.time}
-                              </span>
-                            </div>
-                            <p className="bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tl-none my-3 p-3 text-start overflow-auto">
-                              {chat?.message}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-                })}
-              </div>
-
-              {/* Send message */}
-              <form
-                className="flex-[0.1] px-5 w-full mt-3"
-                onSubmit={(e) => sendMessage(e)}
-              >
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className=" px-3 py-2 bg-[rgba(35,38,46,0.5)] sm:bg-[rgba(35,38,46,0.5)] rounded-[8px] rounded-tr-none rounded-br-none w-[80%]"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-2 bg-[rgb(0,209,205)] rounded-[8px] rounded-tl-none rounded-bl-none w-[20%] overflow-hidden"
-                >
-                  Send
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
-      </div>
+    <div className="meeting-dock relative overflow-hidden bg-primary">
+      {window.innerWidth >= 500 ? (
+        <RenderOnBigScreen
+          channelRef={channelRef}
+          chatOpen={chatOpen}
+          chats={chats}
+          formatTime={formatTime}
+          handleChangeMessage={handleChangeMessage}
+          memberDetails={memberDetails}
+          name={name}
+          newMessage={newMessage}
+          participants={participants}
+          sendMessage={sendMessage}
+          toggleChat={toggleChat}
+          tracks={tracks}
+          uid={uid}
+          duration={duration}
+        />
+      ) : (
+        <RenderOnSmallScreen
+          channelRef={channelRef}
+          chatOpen={chatOpen}
+          chats={chats}
+          formatTime={formatTime}
+          handleChangeMessage={handleChangeMessage}
+          memberDetails={memberDetails}
+          name={name}
+          newMessage={newMessage}
+          participants={participants}
+          sendMessage={sendMessage}
+          toggleChat={toggleChat}
+          tracks={tracks}
+          uid={uid}
+          duration={duration}
+        />
+      )}
     </div>
   );
 };
