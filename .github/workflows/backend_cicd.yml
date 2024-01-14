@@ -24,6 +24,7 @@ jobs:
 
       - name: Create .env file
         run: |
+          cd backend
           echo "DB_URI=${{ secrets.DB_URI }}" > .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }}" >> .env
