@@ -58,19 +58,8 @@ const ChatPortal = ({
   const { state } = useDataLayerValue();
   const chatBoxRef = useRef();
   const [showDonwBtn, setShowDonwBtn] = useState(false);
-  useEffect(() => {
-    const chatBox = chatBoxRef.current;
-    if (chatBox) {
-      const chatHeight = chatBox?.scrollHeight;
-      const currHeight = chatBox?.scrollTop;
-      if (currHeight < chatHeight) {
-        setShowDonwBtn(true);
-      }
-    }
-  }, [chats]);
 
   const handleShowDownBtn = () => {
-    console.log("first");
     const targetHeight =
       chatBoxRef.current?.scrollHeight - chatBoxRef.current?.offsetHeight;
     if (chatBoxRef.current?.scrollTop < targetHeight) {
@@ -83,6 +72,7 @@ const ChatPortal = ({
   const handleShowBtnClick = () => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current?.scrollHeight;
+      setShowDonwBtn(false);
     }
   };
 
@@ -90,7 +80,7 @@ const ChatPortal = ({
     if (chatBoxRef?.current) {
       handleShowDownBtn();
     }
-  }, [chatBoxRef.current?.scrollTop]);
+  }, [chats, chatBoxRef.current?.scrollTop]);
 
   return (
     <div

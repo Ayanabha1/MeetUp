@@ -1,0 +1,64 @@
+service: meetup
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+functions:
+  # Lambda functions to handle auth routes
+  createUser:
+    handler: src/Handlers/AuthHandlers/createUser.handler
+    events:
+      - httpApi:
+          path: /api/v1/auth/signup
+          method: POST
+  login:
+    handler: src/Handlers/AuthHandlers/login.handler
+    events:
+      - httpApi:
+          path: /api/v1/auth/login
+          method: POST
+  getUser:
+    handler: src/Handlers/AuthHandlers/getUser.handler
+    events:
+      - httpApi:
+          path: /api/v1/auth/get-user
+          method: GET
+  getMeetingHistory:
+    handler: src/Handlers/AuthHandlers/getMeetingHistory.handler
+    events:
+      - httpApi:
+          path: /api/v1/auth/get-meeting-history
+          method: GET
+
+  # Lambda functions to handle meeting routes
+  createMeeting:
+    handler: src/Handlers/MeetingHandlers/createMeeting.handler
+    events:
+      - httpApi:
+          path: /api/v1/meet/create-meeting
+          method: GET
+  getAllMeetings:
+    handler: src/Handlers/MeetingHandlers/getAllMeetings.handler
+    events:
+      - httpApi:
+          path: /api/v1/meet/get-all-meetings
+          method: GET
+  joinMeeting:
+    handler: src/Handlers/MeetingHandlers/joinMeeting.handler
+    events:
+      - httpApi:
+          path: /api/v1/meet/join-meeting
+          method: POST
+  checkMeetingExists:
+    handler: src/Handlers/MeetingHandlers/checkMeetingExists.handler
+    events:
+      - httpApi:
+          path: /api/v1/meet/check-meeting-exists
+          method: POST
