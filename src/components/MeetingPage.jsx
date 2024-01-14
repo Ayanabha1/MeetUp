@@ -1,15 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  micoff,
-  user,
-  logo,
-  person1,
-  person2,
-  person3,
-  cancel,
-} from "../assets";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import MeetFeeds from "./MeetFeeds";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 import {
   config,
@@ -17,12 +7,7 @@ import {
   useMicrophoneAndCameraTracks,
   useRTMClient,
 } from "./commSettings";
-import MeetControls from "./MeetControls";
 import { Api } from "../Api/Axios";
-import { AgoraVideoPlayer } from "agora-rtc-react";
-import { Clock10 } from "lucide-react";
-import ChatPortal from "./ChatPortal";
-import { MeetingOverlay } from "./MeetingOverlay";
 import RenderOnBigScreen from "./RenderOnBigScreen";
 import RenderOnSmallScreen from "./RenderOnSmallScreen";
 
@@ -37,8 +22,7 @@ const MeetingPage = () => {
   const [connectionEstablished, setConnectionEstablished] = useState(false);
   const { ready, tracks } = useMicrophoneAndCameraTracks();
   const [uid, setUid] = useState(String(Math.floor(Math.random() * 10000)));
-  const { state, startLoading, stopLoading, showError, showSuccess, showInfo } =
-    useDataLayerValue();
+  const { state, showError, showInfo } = useDataLayerValue();
   const navigate = useNavigate();
   let channelRef = useRef();
   const [memberDetails, setMemberDetails] = useState([]);
@@ -302,6 +286,7 @@ const MeetingPage = () => {
       type: "chat",
       name: name,
       uid: uid,
+      email: state?.userData?.email,
       time: getTime(),
       picture: "",
       message: __message,

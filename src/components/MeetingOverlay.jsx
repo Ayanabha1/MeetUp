@@ -17,7 +17,7 @@ const ParticipantTracks = ({
     return target?.name;
   };
   return (
-    <div className="absolute top-0 right-0 h-[98%] min-w-[25vw]  p-2 flex gap-1">
+    <div className="absolute top-0 right-0 h-[98%] min-w-[25vw]  p-2 flex flex-col gap-1">
       {/* More participants */}
       {participants?.map((participant, i) => {
         if (i >= 3) return null;
@@ -121,8 +121,8 @@ export const MeetingOverlay = ({
       {/* Chat section */}
       <div
         className={`${
-          chatOpen ? "w-[400px]" : "w-[0px]"
-        } h-full transition-all duration-300 pb-[30px] `}
+          chatOpen ? "sm:w-[400px]" : "sm:w-[0px]"
+        } h-full transition-all duration-300 pb-[30px] absolute z-50 w-[94%] left-[50%] translate-x-[-50%] sm:left-[unset] sm:translate-x-[unset] sm:static`}
       >
         <ChatPortal
           chatOpen={chatOpen}

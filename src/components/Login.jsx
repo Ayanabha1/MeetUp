@@ -16,6 +16,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await loginFunc(loginData);
+      console.log(res);
       navigate("/");
     } catch (err) {
       console.log("Error in login ... Try again");

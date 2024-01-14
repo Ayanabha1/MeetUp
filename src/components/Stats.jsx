@@ -6,7 +6,7 @@ import CountUp from "react-countup";
 const Stats = () => {
   return (
     <section
-      className={`flex justify-between items-center sm:flex-row flex-col flex-wrap sm:mb-20 mb-6 sm:mt-0 mt-20 `}
+      className={`flex justify-center lg:justify-between items-center sm:flex-row flex-col flex-wrap sm:mb-20 mb-6 sm:mt-0 mt-20 `}
     >
       {stats.map((stat, i) => (
         <div
