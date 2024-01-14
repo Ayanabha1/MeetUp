@@ -1,0 +1,42 @@
+name: Serverless CI/CD
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Create .env file
+        run: |
+          echo "DB_URI=${{ secrets.DB_URI }}" > .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }}" >> .env
+        env:
+          DB_URI: ${{ secrets.DB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          AWS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
+
+      - name: Deploy to AWS
+        run: |
+          cd backend
+          npx serverless deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
