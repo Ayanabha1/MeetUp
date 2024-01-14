@@ -5,7 +5,7 @@ import { her1_new } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
-import { Fade } from "react-reveal";
+// import { Fade } from "react-reveal";
 import { Api } from "../Api/Axios";
 
 const Hero = () => {
@@ -114,13 +114,13 @@ const Hero = () => {
       <div
         className={`flex-1 flex md:justify-end ${styles.flexCenter} md:mt-[0px] relative`}
       >
-        <Fade bottom distance="10%">
-          <img
-            src={her1_new}
-            alt="hero image"
-            className="w-[80%] h-[80%] relative z-[5]"
-          />
-        </Fade>
+        {/* <Fade bottom distance="10%"> */}
+        <img
+          src={her1_new}
+          alt="hero image"
+          className="w-[80%] h-[80%] relative z-[5]"
+        />
+        {/* </Fade> */}
 
         <div className="absolute z-[0] w-[40%] h-[35%] top-0 pink__gradient " />
         <div className="absolute z-[0] w-[80%] h-[85%] bottom-40 rounded-full white__gradient " />

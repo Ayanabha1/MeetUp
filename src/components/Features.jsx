@@ -1,7 +1,7 @@
 import { features } from "../constants";
 import styles, { layout } from "../styles";
 import Button from "./Button";
-import { Fade } from "react-reveal";
+// import { Fade } from "react-reveal";
 
 const FeatureCard = ({ icon, title, content, index }) => (
   <div
@@ -49,13 +49,13 @@ const Features = () => {
         </div>
       </div>
 
-      <Fade bottom distance="10%">
-        <div className={`${layout.sectionImg} flex-col `}>
-          {features.map((feature, index) => (
-            <FeatureCard key={feature.id} {...feature} index={index} />
-          ))}
-        </div>
-      </Fade>
+      {/* <Fade bottom distance="10%"> */}
+      <div className={`${layout.sectionImg} flex-col `}>
+        {features.map((feature, index) => (
+          <FeatureCard key={feature.id} {...feature} index={index} />
+        ))}
+      </div>
+      {/* </Fade> */}
     </section>
   );
 };
