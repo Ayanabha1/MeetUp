@@ -1,7 +1,6 @@
 import { feedback } from "../constants";
 import styles from "../styles";
 import FeedbackCard from "./FeedbackCard";
-import { Fade } from "react-awesome-reveal";
 
 const Testimonials = () => {
   return (
@@ -25,17 +24,10 @@ const Testimonials = () => {
         </div>
       </div>
       <div className="flex flex-wrap gap-5 sm:justify-start justify-center w-full feedback-container relative z-[1]">
-        <Fade
-          cascade
-          damping={0.1}
-          triggerOnce
-          className="flex feedback-container-fade-container"
-        >
-          {feedback.map((card, i) => (
-            <FeedbackCard key={i} {...card} firstCard={i === 0} />
-          ))}
-        </Fade>
-      </div>{" "}
+        {feedback.map((card, i) => (
+          <FeedbackCard key={i} {...card} firstCard={i === 0} />
+        ))}
+      </div>
     </section>
   );
 };

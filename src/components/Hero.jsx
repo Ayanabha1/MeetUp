@@ -4,8 +4,6 @@ import { her1_new } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
-import { Reveal } from "react-awesome-reveal";
-import { keyframes } from "@emotion/react";
 import { Api } from "../Api/Axios";
 
 const Hero = () => {
@@ -51,18 +49,6 @@ const Hero = () => {
     }
     stopLoading();
   };
-
-  const customAnimation = keyframes`
-    from {
-      opacity: 0;
-      transform: translate3d(0px, 100px, 0);
-    }
-
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  `;
 
   return (
     <section id="home" className={`flex md:flex-row flex-col py-6`}>
@@ -132,18 +118,11 @@ const Hero = () => {
       <div
         className={`flex-1 flex md:justify-end ${styles.flexCenter} md:mt-[0px] relative`}
       >
-        <Reveal
-          triggerOnce={true}
-          keyframes={customAnimation}
-          delay={70}
-          className="w-[80%] h-[80%] relative z-[5]"
-        >
-          <img
-            src={her1_new}
-            alt="hero image"
-            className="h-full w-full xs:w-[90%]"
-          />
-        </Reveal>
+        <img
+          src={her1_new}
+          alt="hero image"
+          className="h-full w-full xs:w-[90%] z-[5]"
+        />
 
         <div className="absolute z-[0] w-[40%] h-[35%] top-0 pink__gradient " />
         <div className="absolute z-[0] w-[80%] h-[85%] bottom-40 rounded-full white__gradient " />
