@@ -21,7 +21,7 @@ const Loader = () => {
   return (
     <div
       style={loaderStyle}
-      className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center text-[30px] text-white z-[50] bg-[rgba(0,0,0,0.5)] backdrop-blur-[10px]"
+      className="fixed top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center text-[30px] text-white z-[50] bg-[rgba(0,0,0,0.5)] backdrop-blur-[10px]"
     >
       <p className="font-poppins flex">
         Loading <p className="font-poppins w-[1px]">{loaderDots}</p>

@@ -1,7 +1,7 @@
 import { features } from "../constants";
 import styles, { layout } from "../styles";
 import Button from "./Button";
-// import { Fade } from "react-reveal";
+import { Fade } from "react-awesome-reveal";
 
 const FeatureCard = ({ icon, title, content, index }) => (
   <div
@@ -33,7 +33,7 @@ const Features = () => {
   };
   return (
     <section id="features" className={`${layout.section}`}>
-      <div className={`${layout.sectionInfo}`}>
+      <div className={`${layout.sectionInfo} text-center sm:text-left`}>
         <h2 className={styles.heading2}>
           You build relations, <br /> We'll handle connections.
         </h2>
@@ -44,18 +44,26 @@ const Features = () => {
           Build meaningful relationships, both personally and professionally,
           with Meetup's transformative video call platform.
         </p>
-        <div onClick={() => scrollToTop()}>
+        <div
+          onClick={() => scrollToTop()}
+          className="flex justify-center sm:justify-start w-full"
+        >
           <Button styles="mt-10" />
         </div>
       </div>
 
-      {/* <Fade bottom distance="10%"> */}
-      <div className={`${layout.sectionImg} flex-col `}>
-        {features.map((feature, index) => (
-          <FeatureCard key={feature.id} {...feature} index={index} />
-        ))}
+      <div className={`${layout.sectionImg} flex-col mt-[100px] md:mt-0`}>
+        <Fade
+          cascade
+          damping={0.2}
+          triggerOnce
+          className="w-full h-full xl:w-[80%]"
+        >
+          {features.map((feature, index) => (
+            <FeatureCard key={feature.id} {...feature} index={index} />
+          ))}
+        </Fade>
       </div>
-      {/* </Fade> */}
     </section>
   );
 };

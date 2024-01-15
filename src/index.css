@@ -95,7 +95,7 @@
       rgb(255 255 255 /20%) -278.56%,
       rgb(109 109 109 /20%) -78.47%,
       rgb(17 16 29 /90%) 91.61%);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(7px);
   height: 100%;
   width: 97.5%;
   align-items: center;
@@ -127,11 +127,6 @@
 
 .home-create-btn {
   background: var(--blue-gradient);
-  height: 45px;
-  flex: 0.3;
-  border: 1px solid white;
-  font-size: 18px;
-  padding: 10px 20px;
 }
 
 @media only screen and (max-width:400px) {
@@ -144,8 +139,6 @@
 
   .home-create-btn {
     flex: unset;
-    width: 40%;
-    font-size: 16px;
   }
 }
 
@@ -169,25 +162,29 @@
 
 @-webkit-keyframes slide-top {
   0% {
-    -webkit-transform: translateY(100px);
-    transform: translateY(100px);
+    -webkit-transform: translateY(0px);
+    transform: translateY(50px);
+    opacity: 0%;
   }
 
   100% {
     -webkit-transform: translateY(0);
     transform: translateY(0);
+    opacity: 100%;
   }
 }
 
 @keyframes slide-top {
   0% {
-    -webkit-transform: translateY(100px);
-    transform: translateY(100px);
+    -webkit-transform: translateY(0px);
+    transform: translateY(50px);
+    opacity: 0%;
   }
 
   100% {
     -webkit-transform: translateY(0);
     transform: translateY(0);
+    opacity: 100%;
   }
 }
 
@@ -204,7 +201,7 @@
   background: transparent;
 }
 
-.feedback-card:first-child {
+.feedback-card-1 {
   background: var(--black-gradient);
 
 }
@@ -212,6 +209,7 @@
 .feedback-card:hover {
   background: var(--black-gradient);
 }
+
 
 .btn-blue-gradient {
   background: linear-gradient(157.81deg,

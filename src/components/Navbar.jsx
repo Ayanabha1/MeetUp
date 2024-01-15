@@ -3,6 +3,7 @@ import { logo, menu, close, profile, down } from "../assets";
 import { navLinks } from "../constants";
 import { Link, useNavigate } from "react-router-dom";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
+import { Fade } from "react-awesome-reveal";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
@@ -55,20 +56,22 @@ const Navbar = () => {
             }`}
           />
           {profileToggle && (
-            <ul className="absolute right-0 top-10 sm:block hidden bg-[rgba(255,255,255,0.05)] rounded-md z-[1] overflow-hidden">
-              <li
-                className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white mb-1"
-                onClick={() => navigate("profile")}
-              >
-                Profile
-              </li>
-              <li
-                className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white "
-                onClick={() => handleLogoutClick()}
-              >
-                Logout
-              </li>
-            </ul>
+            <Fade duration={300}>
+              <ul className="absolute right-0 top-10 sm:block hidden bg-[rgba(255,255,255,0.05)] shadow-2xl rounded-md z-[1] overflow-hidden">
+                <li
+                  className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white mb-1"
+                  onClick={() => navigate("profile")}
+                >
+                  Profile
+                </li>
+                <li
+                  className="menu-options-item font-poppins font-normal cursor-pointer text-[16px] text-white "
+                  onClick={() => handleLogoutClick()}
+                >
+                  Logout
+                </li>
+              </ul>
+            </Fade>
           )}
         </div>
       ) : (
