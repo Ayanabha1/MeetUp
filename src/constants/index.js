@@ -43,7 +43,7 @@ export const feedback = [
   {
     id: "feedback-1",
     content:
-      "MeetUp surpassed expectations, creating warm, close connections with quick setup and reliable calls, becoming essential for sharing precious moments.",
+      "MeetUp surpassed all my expectations, creating warm, close connections with quick setup and reliable calls, becoming essential for sharing precious moments.",
     name: " Mark D.",
     title: "Founder & Leader",
     img: person2,
