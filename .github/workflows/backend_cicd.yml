@@ -2,6 +2,7 @@ name: Serverless CI/CD
 
 on:
   pull_request:
+    types: [closed]
     branches:
       - production
 
