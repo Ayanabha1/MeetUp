@@ -1,6 +1,7 @@
 import { features } from "../constants";
 import styles, { layout } from "../styles";
 import Button from "./Button";
+import { Fade } from "react-awesome-reveal";
 
 const FeatureCard = ({ icon, title, content, index }) => (
   <div
@@ -50,11 +51,17 @@ const Features = () => {
           <Button styles="mt-10" />
         </div>
       </div>
-
       <div className={`${layout.sectionImg} flex-col mt-[100px] md:mt-0`}>
-        {features.map((feature, index) => (
-          <FeatureCard key={feature.id} {...feature} index={index} />
-        ))}
+        <Fade
+          cascade
+          damping={0.2}
+          triggerOnce
+          className="w-full h-full xl:w-[80%]"
+        >
+          {features.map((feature, index) => (
+            <FeatureCard key={feature.id} {...feature} index={index} />
+          ))}
+        </Fade>
       </div>
     </section>
   );
