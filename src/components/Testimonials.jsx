@@ -35,7 +35,7 @@ const Testimonials = () => {
             <FeedbackCard key={i} {...card} firstCard={i === 0} />
           ))}
         </Fade>
-      </div>{" "}
+      </div>
     </section>
   );
 };

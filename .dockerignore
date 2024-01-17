@@ -4,4 +4,4 @@ build
 .git
 *.md
 .gitignore
-./backend
+backend

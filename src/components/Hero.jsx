@@ -4,9 +4,9 @@ import { her1_new } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
+import { Api } from "../Api/Axios";
 import { Reveal } from "react-awesome-reveal";
 import { keyframes } from "@emotion/react";
-import { Api } from "../Api/Axios";
 
 const Hero = () => {
   const [joinLink, setJoinLink] = useState("");

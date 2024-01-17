@@ -51,7 +51,6 @@ const Features = () => {
           <Button styles="mt-10" />
         </div>
       </div>
-
       <div className={`${layout.sectionImg} flex-col mt-[100px] md:mt-0`}>
         <Fade
           cascade

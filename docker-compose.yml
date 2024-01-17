@@ -1,0 +1,21 @@
+version: "3"
+services:
+  client:
+    container_name: meetup-client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 8000:8000
+
+  server:
+    container_name: meetup-server
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend/src:/app/src
