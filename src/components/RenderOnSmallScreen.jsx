@@ -5,6 +5,7 @@ import { profile } from "../assets";
 import MeetControls from "./MeetControls";
 import ChatPortal from "./ChatPortal";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
+import ParticipantsSheet from "./ParticipantsSheet";
 
 const SpotLightFeed = ({ videoTrack, videoMuted, image }) => {
   if (!videoMuted && videoTrack) {
@@ -31,7 +32,9 @@ const RenderOnSmallScreen = ({
   participants,
   tracks,
   chatOpen,
+  participantsOpen,
   toggleChat,
+  toggleParticipants,
   channelRef,
   uid,
   newMessage,
@@ -148,15 +151,17 @@ const RenderOnSmallScreen = ({
       {/* Controls */}
       <MeetControls
         channelRef={channelRef}
+        toggleParticipants={toggleParticipants}
         toggleChat={toggleChat}
         tracks={tracks}
         uid={uid}
       />
 
+      {/* Chat section */}
       <div
-        className={`absolute left-0 w-full h-[95%] ${
-          chatOpen ? "z-[20]" : "z-[-10]"
-        }`}
+        className={`absolute left-0 w-full  ${
+          chatOpen ? "z-[20] h-[95%]" : "z-[-10] h-0"
+        } transition-all duration-300`}
       >
         <ChatPortal
           chatOpen={chatOpen}
@@ -165,6 +170,20 @@ const RenderOnSmallScreen = ({
           newMessage={newMessage}
           sendMessage={sendMessage}
           toggleChat={toggleChat}
+          uid={uid}
+        />
+      </div>
+
+      {/* Participants section */}
+      <div
+        className={`absolute left-0 w-full  ${
+          participantsOpen ? "z-[20] h-[95%]" : "z-[-10] h-0"
+        } transition-all duration-300`}
+      >
+        <ParticipantsSheet
+          participants={participants}
+          toggleParticipants={toggleParticipants}
+          participantsOpen={participantsOpen}
           uid={uid}
         />
       </div>

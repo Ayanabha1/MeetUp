@@ -11,7 +11,13 @@ import {
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const MeetControls = ({ toggleChat, tracks, channelRef, uid }) => {
+const MeetControls = ({
+  toggleChat,
+  tracks,
+  channelRef,
+  uid,
+  toggleParticipants,
+}) => {
   const [microphoneOn, setMicrophoneOn] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
   const [roomId, setRoomId] = useState("");
@@ -76,7 +82,7 @@ const MeetControls = ({ toggleChat, tracks, channelRef, uid }) => {
       name: "participants",
       iconOn: Users,
       iconOff: Users,
-      action: () => {},
+      action: toggleParticipants,
       state: true,
     },
     {

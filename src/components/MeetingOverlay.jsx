@@ -11,6 +11,7 @@ import {
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
 import ChatPortal from "./ChatPortal";
+import ParticipantsSheet from "./ParticipantsSheet";
 
 const ParticipantTracks = ({
   tracks,
@@ -104,6 +105,8 @@ export const MeetingOverlay = ({
   newMessage,
   handleChangeMessage,
   sendMessage,
+  toggleParticipants,
+  participantsOpen,
 }) => {
   return (
     <div className=" absolute top-0 left-0 w-full h-full flex transition-all duration-300">
@@ -111,6 +114,7 @@ export const MeetingOverlay = ({
       <div className="flex flex-col flex-[0.8] flex-grow  justify-end items-center pb-[20px] relative transition-all duration-300">
         <MeetControls
           toggleChat={toggleChat}
+          toggleParticipants={toggleParticipants}
           tracks={tracks}
           channelRef={channelRef}
           uid={uid}
@@ -126,21 +130,46 @@ export const MeetingOverlay = ({
       </div>
 
       {/* Chat section */}
+
       <div
-        className={`${
-          chatOpen ? "sm:w-[400px]" : "sm:w-[0px]"
-        } h-full transition-all duration-300 pb-[30px] absolute z-50 w-[94%] left-[50%] translate-x-[-50%] sm:left-[unset] sm:translate-x-[unset] sm:static`}
+        className={`flex flex-col ${
+          chatOpen || participantsOpen ? "w-[400px]" : "w-0"
+        } transition-all duration-300`}
       >
-        <ChatPortal
-          chatOpen={chatOpen}
-          toggleChat={toggleChat}
-          chats={chats}
-          newMessage={newMessage}
-          sendMessage={sendMessage}
-          handleChangeMessage={handleChangeMessage}
-          uid={uid}
-        />
+        <div
+          className={`transition-all duration-300  absolute z-50 w-full left-[50%] translate-x-[-50%] sm:left-[unset] sm:translate-x-[unset] sm:static ${
+            chatOpen
+              ? participantsOpen
+                ? "h-[50%] pb-[30px]"
+                : "h-0"
+              : "h-full"
+          }`}
+        >
+          <ParticipantsSheet
+            participants={participants}
+            participantsOpen={participantsOpen}
+            toggleParticipants={toggleParticipants}
+            uid={uid}
+          />
+        </div>
+        <div
+          className={`transition-all duration-300 pb-[30px] absolute z-50 w-full left-[50%] translate-x-[-50%] sm:left-[unset] sm:translate-x-[unset] sm:static ${
+            participantsOpen ? (chatOpen ? "h-[50%]" : "h-0") : "h-full"
+          }`}
+        >
+          <ChatPortal
+            chatOpen={chatOpen}
+            toggleChat={toggleChat}
+            chats={chats}
+            newMessage={newMessage}
+            sendMessage={sendMessage}
+            handleChangeMessage={handleChangeMessage}
+            uid={uid}
+          />
+        </div>
       </div>
+
+      {/* Participants section */}
     </div>
   );
 };

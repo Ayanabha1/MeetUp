@@ -20,6 +20,8 @@ const RenderOnBigScreen = ({
   chats,
   formatTime,
   duration,
+  participantsOpen,
+  toggleParticipants,
 }) => {
   const { state } = useDataLayerValue();
   const { userData } = state;
@@ -55,7 +57,7 @@ const RenderOnBigScreen = ({
               className="bg-[rgb(217,84,58)] w-[25px] h-[25px] p-[5px] rounded-[50%]"
               src={micoff}
             />
-          )}{" "}
+          )}
           {name} (You)
         </span>
       </div>
@@ -72,6 +74,8 @@ const RenderOnBigScreen = ({
         handleChangeMessage={handleChangeMessage}
         sendMessage={sendMessage}
         chats={chats}
+        participantsOpen={participantsOpen}
+        toggleParticipants={toggleParticipants}
       />
     </>
   );
