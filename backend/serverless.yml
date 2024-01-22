@@ -62,3 +62,11 @@ functions:
       - httpApi:
           path: /api/v1/meet/check-meeting-exists
           method: POST
+
+  # Lambda function to upload image
+  uploadImage:
+    handler: src/Handlers/FileUploadHandlers/FileUploadHandler.handler
+    events:
+      - httpApi:
+          path: /api/v1/uploadImage
+          method: POST

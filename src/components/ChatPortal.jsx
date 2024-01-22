@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { person2, person3, cancel } from "../assets";
+import { person2, person3, cancel, profile } from "../assets";
 import { X, Send, ChevronDown } from "lucide-react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 
-const SelfChat = ({ chat }) => {
+const SelfChat = ({ chat, image }) => {
   return (
     <div className="flex flex-col justify-end  w-full items-end">
       <div className="flex flex-col max-w-[88%] gap-[10px]">
         <div className="flex gap-2 justify-start items-start w-full">
-          <img src={person2} className="h-[40px] w-[40px] rounded-full" />
+          <img src={image} className="h-[40px] w-[40px] rounded-full" />
           <span>You</span>
           <div className="text-[rgba(0,0,0,0.55)] flex gap-2">
             <span>•</span>
@@ -24,12 +24,12 @@ const SelfChat = ({ chat }) => {
     </div>
   );
 };
-const OthersChat = ({ chat }) => {
+const OthersChat = ({ chat, image }) => {
   return (
     <div className="flex flex-col justify-end  w-full items-start">
       <div className="flex flex-col max-w-[88%] gap-[10px]">
         <div className="flex gap-2 justify-start items-start w-full">
-          <img src={person3} className="h-[40px] w-10 rounded-full" />
+          <img src={image} className="h-[40px] w-10 rounded-full" />
           <span>{chat?.name}</span>
           <div className="text-[rgba(0,0,0,0.55)] flex gap-2">
             <span>•</span>
@@ -106,14 +106,18 @@ const ChatPortal = ({
         </button>
       </h1>
       <div
-        className="flex flex-col mt-10 h-[80%] gap-[30px] overflow-y-scroll overflow-x-hidden"
+        className="flex flex-col mt-10 pb-10 h-[80%] gap-[30px] overflow-y-scroll overflow-x-hidden"
         ref={chatBoxRef}
       >
         {chats?.map((chat, i) =>
           chat?.email === state?.userData?.email ? (
-            <SelfChat chat={chat} key={i} />
+            <SelfChat
+              chat={chat}
+              image={state.userData.profile_image || profile}
+              key={i}
+            />
           ) : (
-            <OthersChat chat={chat} key={i} />
+            <OthersChat chat={chat} image={chat.picture || profile} key={i} />
           )
         )}
       </div>
@@ -124,6 +128,7 @@ const ChatPortal = ({
         onSubmit={(e) => {
           e.preventDefault();
           sendMessage(e);
+          handleShowBtnClick();
         }}
       >
         <input
@@ -134,7 +139,7 @@ const ChatPortal = ({
           onChange={(e) => handleChangeMessage(e.target.value)}
         />
         <img
-          src={person2}
+          src={state?.userData?.profile_image || profile}
           className="h-[80%] w-10 absolute top-[50%] translate-y-[-50%] rounded-full left-[5px]"
         />
         <button

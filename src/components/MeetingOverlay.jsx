@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { micoff, logo, person1, person2, person3, cancel } from "../assets";
+import {
+  micoff,
+  logo,
+  person1,
+  person2,
+  person3,
+  cancel,
+  profile,
+} from "../assets";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
 import ChatPortal from "./ChatPortal";
@@ -12,10 +20,6 @@ const ParticipantTracks = ({
   channelRef,
   uid,
 }) => {
-  const getParticipantName = (uid) => {
-    const target = memberDetails?.filter((m) => m.uid === uid)[0];
-    return target?.name;
-  };
   return (
     <div className="absolute top-0 right-0 h-[98%] min-w-[25vw]  p-2 flex flex-col gap-1">
       {/* More participants */}
@@ -36,19 +40,19 @@ const ParticipantTracks = ({
               ) : (
                 <div className="bg-black flex justify-center items-center w-full h-full">
                   <img
-                    src={person1}
+                    src={participant?.profile_image || profile}
                     className="w-[10vh] h-[10vh] object-cover rounded-[50%]"
                   />
                 </div>
               )}
-              {memberDetails.mic__muted && (
+              {participant?.mic__muted && (
                 <img
                   className="absolute left-[10px] bottom-[10px] z-50 bg-[rgb(217,84,58)] w-[30px] h-[30px] p-[5px] rounded-[50%]"
                   src={micoff}
                 />
               )}
               <span className="absolute left-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)]  px-[12px] py-[2px] rounded-[8px]">
-                {getParticipantName(participant.uid)}
+                {participant?.name}
               </span>
             </div>
           </>
@@ -64,7 +68,10 @@ const ParticipantTracks = ({
                     <div
                       className={`h-[45px] w-[45px] border border-[rgba(255,255,255,0.3)] rounded-full overflow-hidden`}
                     >
-                      <img src={person2} className="w-full h-full" />
+                      <img
+                        src={participant?.profile_image || profile}
+                        className="w-full h-full"
+                      />
                     </div>
                   </>
                 );

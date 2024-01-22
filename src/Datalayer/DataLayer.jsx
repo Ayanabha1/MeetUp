@@ -116,7 +116,6 @@ export const DataLayer = ({ initialState, reducer, children }) => {
         const token = res.data.token;
         const userData = res.data.user;
         changeLoginState(userData, token);
-        console.log(res.data);
         showSuccess("Login successful");
       })
       .catch((err) => {
@@ -150,6 +149,7 @@ export const DataLayer = ({ initialState, reducer, children }) => {
         loginFunc,
         signupFunc,
         logoutFunc,
+        changeLoginState,
         startLoading,
         stopLoading,
         showSuccess,
