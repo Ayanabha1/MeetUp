@@ -47,12 +47,12 @@ const OthersChat = ({ chat, image }) => {
 };
 
 const ChatPortal = ({
-  toggleChat,
   chatOpen,
   chats,
-  sendMessage,
-  newMessage,
   handleChangeMessage,
+  newMessage,
+  sendMessage,
+  toggleChat,
   uid,
 }) => {
   const { state } = useDataLayerValue();
@@ -85,8 +85,8 @@ const ChatPortal = ({
   return (
     <div
       className={`${
-        chatOpen ? "opacity-100" : "opacity-0"
-      } h-full m-3 p-5 bg-white  overflow-hidden transition-all duration-300 rounded-xl text-black flex flex-col relative`}
+        chatOpen ? "opacity-100 h-full" : "opacity-0 h-0"
+      }  m-3 p-5 bg-white  overflow-hidden transition-all duration-300 rounded-xl text-black flex flex-col relative`}
     >
       {/* Go down btn */}
       <button
@@ -128,7 +128,10 @@ const ChatPortal = ({
         onSubmit={(e) => {
           e.preventDefault();
           sendMessage(e);
-          handleShowBtnClick();
+          setTimeout(() => {
+            console.log("first");
+            handleShowBtnClick();
+          }, 50);
         }}
       >
         <input

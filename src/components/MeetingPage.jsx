@@ -29,6 +29,8 @@ const MeetingPage = () => {
   const [chats, setChats] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [duration, setDuration] = useState(0);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [participantsOpen, setParticipantsOpen] = useState(false);
   const urlParams = useParams();
 
   const init = async (roomName) => {
@@ -176,10 +178,11 @@ const MeetingPage = () => {
     return `${date} ${months[month]}, ${year}`;
   };
 
-  const [chatOpen, setChatOpen] = useState(false);
-
   const toggleChat = () => {
     setChatOpen(!chatOpen);
+  };
+  const toggleParticipants = () => {
+    setParticipantsOpen(!participantsOpen);
   };
 
   const formatTime = (timeInSeconds) => {
@@ -341,6 +344,8 @@ const MeetingPage = () => {
           participants={participants}
           sendMessage={sendMessage}
           toggleChat={toggleChat}
+          toggleParticipants={toggleParticipants}
+          participantsOpen={participantsOpen}
           tracks={tracks}
           uid={uid}
           duration={duration}
@@ -358,6 +363,8 @@ const MeetingPage = () => {
           participants={participants}
           sendMessage={sendMessage}
           toggleChat={toggleChat}
+          toggleParticipants={toggleParticipants}
+          participantsOpen={participantsOpen}
           tracks={tracks}
           uid={uid}
           duration={duration}
