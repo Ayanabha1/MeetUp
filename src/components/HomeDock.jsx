@@ -3,6 +3,7 @@ import styles from "../styles";
 import { Navbar, Hero, Stats, Testimonials, Footer } from "./index";
 import Features from "./Features";
 import { home, feedback, features, user } from "../assets";
+import { Link } from "react-router-dom";
 
 const HomeDock = () => {
   const [sidebarVis, setSidebarVis] = useState(false);
@@ -35,9 +36,9 @@ const HomeDock = () => {
         <a href="#feedbacks">
           <img src={feedback} alt="" />
         </a>
-        <a href="/profile">
+        <Link to="/profile">
           <img src={user} alt="" />
-        </a>
+        </Link>
       </div>
       <div className={`${styles.paddingX} ${styles.flexCenter}`}>
         <div className="flex w-full xl:px-6">

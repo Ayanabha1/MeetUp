@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 import { profile } from "../assets";
 import { Api } from "../Api/Axios";
-import { Pencil } from "lucide-react";
+import { Pencil, ChevronLeft } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const MeetHistoryCard = ({ meeting_id, start_time }) => {
   const getDate = (date) => {
@@ -35,8 +36,8 @@ const MeetHistoryCard = ({ meeting_id, start_time }) => {
 
   return (
     <div
-      className="flex gap-[2px] w-full  bg-[rgba(255,255,255,0.1)] rounded-[5px] mt-4 p-2 justify-between px-3 border-[1px] border-[rgba(255,255,255,0.05)] "
-      style={{ boxShadow: "1px 1px 10px rgba(255,255,255,0.15)" }}
+      className="flex gap-[2px] w-full  bg-[rgba(255,255,255,0.05)] rounded-[5px] mt-4 p-2 justify-between px-3 border-[1px] border-[rgba(255,255,255,0.05)] "
+      style={{ boxShadow: "1px 1px 3px rgba(0,0,0,0.25)" }}
     >
       <div className="flex flex-col gap-[2px] text-left">
         <span>Meeting code </span>
@@ -64,7 +65,7 @@ const Profile = () => {
   const { userData } = state;
   const [profileImage, setProfileImage] = useState(profile);
   const [meetings, setMeetings] = useState([]);
-
+  const navigate = useNavigate();
   const getMeetingHistory = async () => {
     startLoading();
     await Api.get("/auth/get-meeting-history")
@@ -141,10 +142,21 @@ const Profile = () => {
   }, [state.userData]);
 
   return (
-    <div className="bg-[rgba(0,4,15)] w-[100vw] h-[100vh] overflow-scroll flex flex-col items-center p-10 text-white gap-6 text-[15px] ss:text-[18px]  ">
+    <div className="relative bg-primary w-[100vw] h-[100vh] overflow-scroll flex flex-col items-center p-10 text-white gap-6 text-[15px] ss:text-[18px]  ">
+      <button
+        className="hidden absolute left-10 top-10 p-3 pr-6 sm:flex gap-1 items-center bg-[rgba(255,255,255,0.15)] rounded-lg shadow-xl z-50 text-white"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        <ChevronLeft className="h-6 w-6" /> Back
+      </button>
+      <div className="absolute z-[0] w-[40%] h-[35%] top-0 left-0 pink__gradient_2 " />
+      <div className="absolute z-[0] w-[50%] h-[50%] bottom-0 right-0 blue__gradient_2 " />
+
       <div
-        className="w-[300px] ss:w-[500px] overflow-hidden flex flex-col py-10 rounded-[8px] items-center gap-2 ss:gap-7"
-        style={{ boxShadow: "1px 1px 10px rgba(255,255,255,0.15)" }}
+        className="bg-[rgba(255,255,255,0.015)] backdrop-blur-[2px] w-[300px] ss:w-[500px] overflow-hidden flex flex-col py-10 rounded-[8px] items-center gap-2 ss:gap-7"
+        style={{ boxShadow: "1px 1px 3px rgba(0,0,0,0.25)" }}
       >
         <div className="relative">
           <img
@@ -173,14 +185,14 @@ const Profile = () => {
       </div>
 
       <div
-        className="p-5 w-[300px] ss:w-[500px] h-[65%] text-center rounded-[8px] overflow-hidden"
-        style={{ boxShadow: "1px 1px 10px rgba(255,255,255,0.15)" }}
+        className="bg-[rgba(255,255,255,0.015)] backdrop-blur-[2px] p-5 w-[300px] ss:w-[500px] h-[65%] text-center rounded-[8px] overflow-hidden"
+        style={{ boxShadow: "1px 1px 3px rgba(0,0,0,0.25)" }}
       >
         <span>
           Meetings Attended{" "}
           <span
             className="px-3 rounded-[3px] bg-[rgba(255,255,255,0.1)]"
-            style={{ boxShadow: "1px 1px 10px rgba(255,255,255,0.15)" }}
+            style={{ boxShadow: "1px 1px 3px rgba(0,0,0,0.15)" }}
           >
             {meetings?.length}
           </span>{" "}
@@ -191,13 +203,6 @@ const Profile = () => {
           {meetings?.map((meeting, i) => (
             <MeetHistoryCard key={i} {...meeting} />
           ))}
-          <div
-            className="w-full h-[20px] sticky bottom-0"
-            style={{
-              background:
-                "linear-gradient(rgba(0, 0, 0, 0.05) 0%,rgba(0, 0, 0, 0.75) 100%)",
-            }}
-          ></div>
         </div>
       </div>
     </div>

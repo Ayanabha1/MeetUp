@@ -39,7 +39,7 @@ const MeetingPage = () => {
     try {
       await rtm__client.login({ uid });
       await rtm__client.addOrUpdateLocalUserAttributes({
-        name: name,
+        name: state?.userData?.name,
         uid: uid,
         profile_image: state?.userData?.profile_image,
       });
@@ -72,7 +72,7 @@ const MeetingPage = () => {
       }
       const user_temp = user;
       user_temp.name = name;
-      user_temp.profile_image = profile_image;
+      user_temp.profile_image = profile_image || null;
       setParticipants((prevParts) => [...prevParts, user_temp]);
 
       if (mediaType === "audio") {
