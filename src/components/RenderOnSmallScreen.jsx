@@ -79,7 +79,7 @@ const RenderOnSmallScreen = ({
           ) : (
             <>
               <SpotLightFeed
-                image={spotLight?.image || profile}
+                image={spotLight?.profile_image || profile}
                 videoTrack={spotLight.videoTrack}
                 videoMuted={!spotLight.videoTrack}
               />
@@ -107,7 +107,7 @@ const RenderOnSmallScreen = ({
               ) : (
                 <div className="flex justify-center items-center h-full w-full">
                   <img
-                    src={userData.profile_image || profile}
+                    src={userData?.profile_image || profile}
                     className="w-[25%] h-[25%] object-cover rounded-[50%]"
                   />
                 </div>

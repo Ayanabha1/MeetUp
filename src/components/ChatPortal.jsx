@@ -136,7 +136,7 @@ const ChatPortal = ({
       >
         <input
           type="text"
-          className="h-[50px] w-full px-3 pl-[60px] rounded-full border"
+          className="h-[50px] w-full px-3 pr-[60px] pl-[60px] rounded-full border"
           placeholder="Type your message here"
           value={newMessage}
           onChange={(e) => handleChangeMessage(e.target.value)}

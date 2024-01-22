@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
+import { ChevronLeft } from "lucide-react";
 
 const Signup = () => {
   const [signupData, setSignupData] = useState({});
@@ -30,6 +31,14 @@ const Signup = () => {
     <div className="flex bg-primary w-[100vw] h-[100vh] overflow-hidden justify-center items-center relative ">
       <div className="absolute z-[0] w-[40%] h-[35%] top-0 left-0 pink__gradient_2 " />
       <div className="absolute z-[0] w-[50%] h-[50%] bottom-0 right-0 blue__gradient_2 " />
+      <button
+        className="hidden absolute left-10 top-10 p-3 pr-6 sm:flex gap-1 items-center bg-[rgba(255,255,255,0.15)] rounded-lg shadow-xl z-50 text-white"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        <ChevronLeft className="h-6 w-6" /> Back
+      </button>
       <div className="auth-container z-10 flex flex-col text-white font-poppins w-[75%] ss:w-[60%] md:w-[30%] max-w-[450px] min-w-[300px] ">
         {" "}
         <div className="flex flex-col justify-center items-center">

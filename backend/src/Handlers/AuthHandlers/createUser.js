@@ -50,6 +50,8 @@ module.exports.handler = async (event, context) => {
       name: trimmedName,
       email: trimmedEmail,
       password: hashedPass,
+      profile_image:
+        "https://meetup-images.s3.ap-south-1.amazonaws.com/images/profile.png",
     });
 
     const newUser = await user.save();
