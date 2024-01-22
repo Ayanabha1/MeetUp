@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
-import { person2 } from "../assets";
+import { profile } from "../assets";
 import { Api } from "../Api/Axios";
+import { Pencil } from "lucide-react";
+import axios from "axios";
 
 const MeetHistoryCard = ({ meeting_id, start_time }) => {
   const getDate = (date) => {
@@ -51,9 +53,18 @@ const MeetHistoryCard = ({ meeting_id, start_time }) => {
 };
 
 const Profile = () => {
-  const { state, showError, startLoading, stopLoading } = useDataLayerValue();
+  const {
+    state,
+    showError,
+    showSuccess,
+    startLoading,
+    stopLoading,
+    changeLoginState,
+  } = useDataLayerValue();
   const { userData } = state;
+  const [profileImage, setProfileImage] = useState(profile);
   const [meetings, setMeetings] = useState([]);
+
   const getMeetingHistory = async () => {
     startLoading();
     await Api.get("/auth/get-meeting-history")
@@ -66,9 +77,60 @@ const Profile = () => {
     stopLoading();
   };
 
+  const uploadImage = async (e) => {
+    const baseURL = import.meta.env.VITE_API_URL;
+    startLoading();
+
+    const file = e.target.files[0];
+    if (!file) {
+      showError("Please upload a file");
+      stopLoading();
+
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      showError("Please select an image file");
+      stopLoading();
+
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    await axios
+      .post(`${baseURL}/uploadImage`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("AUTH_TOKEN")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.data.image) {
+          setProfileImage(res.data.image);
+        }
+        changeLoginState(res.data.userData, res.data.token);
+        showSuccess("Image uploaded successfully");
+      })
+      .catch((err) => {
+        showError(
+          err?.response?.data?.message ||
+            "Image upload failed ... please try again"
+        );
+        stopLoading();
+      });
+
+    stopLoading();
+  };
+
   useEffect(() => {
     getMeetingHistory();
   }, []);
+
+  useEffect(() => {
+    if (userData.profile_image) {
+      setProfileImage(userData.profile_image);
+    }
+  }, [userData]);
 
   useEffect(() => {
     let first_name = undefined;
@@ -84,11 +146,24 @@ const Profile = () => {
         className="w-[300px] ss:w-[500px] overflow-hidden flex flex-col py-10 rounded-[8px] items-center gap-2 ss:gap-7"
         style={{ boxShadow: "1px 1px 10px rgba(255,255,255,0.15)" }}
       >
-        <div className="">
+        <div className="relative">
           <img
-            src={person2}
+            src={profileImage}
             alt=""
             className=" w-[100px] h-[100px] ss:w-[125px] ss:h-[125px] rounded-full object-cover "
+          />
+          <label
+            htmlFor="upload-image"
+            className="absolute bottom-0 right-0 rounded-full p-2 z-[50] bg-white bg-opacity-50 backdrop-blur-[5px] text-black cursor-pointer"
+          >
+            <Pencil className="h-5 w-5 " />
+          </label>
+          <input
+            type="file"
+            id="upload-image"
+            className="hidden"
+            accept="image/*"
+            onChange={uploadImage}
           />
         </div>
         <div className="flex flex-col text-center gap-2 ss:gap-4 mb-5">

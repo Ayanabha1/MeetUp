@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { AgoraVideoPlayer } from "agora-rtc-react";
-import { micoff, person1, person2, user } from "../assets";
+import { profile } from "../assets";
 import MeetControls from "./MeetControls";
 import ChatPortal from "./ChatPortal";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
-const SpotLightFeed = ({ videoTrack, videoMuted }) => {
+const SpotLightFeed = ({ videoTrack, videoMuted, image }) => {
   if (!videoMuted && videoTrack) {
     return (
       <AgoraVideoPlayer videoTrack={videoTrack} className={`h-full w-full`} />
@@ -16,7 +17,7 @@ const SpotLightFeed = ({ videoTrack, videoMuted }) => {
         className={`h-full w-full object-contain flex justify-center items-center overflow-hidden`}
       >
         <img
-          src={person2}
+          src={image}
           className="w-[25%] h-[25%] object-cover rounded-[50%]"
         />
       </div>
@@ -42,11 +43,8 @@ const RenderOnSmallScreen = ({
 }) => {
   const [people, setPeople] = useState(1);
   const [spotLight, setSpotLight] = useState(null);
-
-  const getParticipantName = (uid) => {
-    const target = memberDetails?.filter((m) => m.uid === uid)[0];
-    return target?.name;
-  };
+  const { state } = useDataLayerValue();
+  const { userData } = state;
 
   const setSpotlightSlot = (user) => {
     setSpotLight(user);
@@ -54,7 +52,6 @@ const RenderOnSmallScreen = ({
 
   useEffect(() => {
     setPeople(participants.size);
-    console.log(participants.length);
   }, [participants]);
 
   return (
@@ -68,6 +65,7 @@ const RenderOnSmallScreen = ({
           {spotLight === null ? (
             <>
               <SpotLightFeed
+                image={userData.profile_image || profile}
                 videoTrack={tracks && tracks[1]}
                 videoMuted={tracks && tracks[1]?.muted}
               />
@@ -78,11 +76,12 @@ const RenderOnSmallScreen = ({
           ) : (
             <>
               <SpotLightFeed
+                image={spotLight?.image || profile}
                 videoTrack={spotLight.videoTrack}
                 videoMuted={!spotLight.videoTrack}
               />
               <span className="absolute right-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)] text-[12px] px-[5px] py-[2px] rounded-[5px]">
-                {getParticipantName(spotLight?.uid)}
+                {spotLight?.name}
               </span>
             </>
           )}
@@ -97,10 +96,19 @@ const RenderOnSmallScreen = ({
               className="h-[100%] min-w-[30%] max-w-[30%] mr-2 overflow-hidden rounded-[5px] relative"
               onClick={() => setSpotlightSlot(null)}
             >
-              <AgoraVideoPlayer
-                videoTrack={tracks && tracks[1]}
-                className={`h-full w-full`}
-              />
+              {tracks ? (
+                <AgoraVideoPlayer
+                  videoTrack={tracks && tracks[1]}
+                  className={`h-full w-full`}
+                />
+              ) : (
+                <div className="flex justify-center items-center h-full w-full">
+                  <img
+                    src={userData.profile_image || profile}
+                    className="w-[25%] h-[25%] object-cover rounded-[50%]"
+                  />
+                </div>
+              )}
               <span className="absolute right-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)] text-[12px] px-[5px] py-[2px] rounded-[5px]">
                 You
               </span>
@@ -115,12 +123,21 @@ const RenderOnSmallScreen = ({
                   className="h-[100%] min-w-[30%] max-w-[30%] mr-2 overflow-hidden rounded-[5px] relative"
                   onClick={() => setSpotlightSlot(user)}
                 >
-                  <AgoraVideoPlayer
-                    videoTrack={user.videoTrack}
-                    className={`h-full w-full`}
-                  />
+                  {user.videoTrack ? (
+                    <AgoraVideoPlayer
+                      videoTrack={user.videoTrack}
+                      className={`h-full w-full`}
+                    />
+                  ) : (
+                    <div className="flex justify-center items-center h-full w-full">
+                      <img
+                        src={user?.profile_image || profile}
+                        className="w-[25%] h-[25%] object-cover rounded-[50%]"
+                      />
+                    </div>
+                  )}
                   <span className="absolute right-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)] text-[12px] px-[5px] py-[2px] rounded-[5px]">
-                    {getParticipantName(user?.uid)}
+                    {user?.name}
                   </span>
                 </div>
               )
@@ -138,7 +155,7 @@ const RenderOnSmallScreen = ({
 
       <div
         className={`absolute left-0 w-full h-[95%] ${
-          chatOpen ? "z-[20]" : "z-0"
+          chatOpen ? "z-[20]" : "z-[-10]"
         }`}
       >
         <ChatPortal

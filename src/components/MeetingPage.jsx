@@ -39,6 +39,7 @@ const MeetingPage = () => {
       await rtm__client.addOrUpdateLocalUserAttributes({
         name: name,
         uid: uid,
+        profile_image: state?.userData?.profile_image,
       });
       let channel = await rtm__client.createChannel(roomName);
       channelRef.current = channel;
@@ -55,15 +56,23 @@ const MeetingPage = () => {
     // RTC
 
     rtc__client.on("user-published", async (user, mediaType) => {
+      let { name, uid, profile_image } =
+        await rtm__client.getUserAttributesByKeys(user.uid, [
+          "name",
+          "uid",
+          "profile_image",
+        ]);
       await rtc__client.subscribe(user, mediaType);
-      if (mediaType === "video") {
-        if (participants.filter((p) => p.uid === user.uid)) {
-          setParticipants((prevParts) =>
-            prevParts.filter((p) => p.uid !== user.uid)
-          );
-        }
-        setParticipants((prevParts) => [...prevParts, user]);
+      if (participants.filter((p) => p.uid === user.uid)) {
+        setParticipants((prevParts) =>
+          prevParts.filter((p) => p.uid !== user.uid)
+        );
       }
+      const user_temp = user;
+      user_temp.name = name;
+      user_temp.profile_image = profile_image;
+      setParticipants((prevParts) => [...prevParts, user_temp]);
+
       if (mediaType === "audio") {
         user?.audioTrack?.play();
       }
@@ -101,36 +110,8 @@ const MeetingPage = () => {
     setStart(true);
   };
 
-  // const createSocketConnection = async (room_id) => {
-  //   // startLoading();
-  //   const uid = state?.userData?._id;
-  //   const baseURL = import.meta.env.VITE_SOCKET_URL;
-  //   await Api.post("/meet/join-meeting", { meeting_id: room_id })
-  //     .then((res) => {
-  //       const session_token = res.data.session_token;
-  //       const newSocket = new WebSocket("ws://localhost:3001");
-  //       newSocket.onopen = () => {
-  //         console.log("Connection established");
-  //         const data = {
-  //           action: "addConnection",
-  //           user_id: uid,
-  //           session_token: session_token,
-  //         };
-  //         newSocket.send(JSON.stringify(data));
-  //         socketRef.current = newSocket;
-  //       };
-  //       setConnectionEstablished(true);
-  //     })
-  //     .catch((err) => {
-  //       navigate("/");
-  //       showError(err?.response?.data?.message);
-  //     });
-  //   // stopLoading();
-  // };
-
   const joinMeeting = async (room_id) => {
     // startLoading();
-    console.log("In route");
 
     await Api.post("/meet/join-meeting", { meeting_id: room_id })
       .then((res) => {
@@ -225,20 +206,24 @@ const MeetingPage = () => {
   }, []);
 
   const handleMemberJoined = async (MemberId) => {
-    let { name, uid } = await rtm__client.getUserAttributesByKeys(MemberId, [
-      "name",
-      "uid",
-    ]);
+    let { name, uid, profile_image } =
+      await rtm__client.getUserAttributesByKeys(MemberId, [
+        "name",
+        "uid",
+        "profile_image",
+      ]);
     showInfo(`${name} joined the call`);
-    setMemberDetails((prev) => [...prev, { name, uid }]);
+    setMemberDetails((prev) => [...prev, { name, uid, profile_image }]);
   };
 
   const handleMemberLeft = async (MemberId) => {
     try {
-      const { name, uid } = await rtm__client.getUserAttributesByKeys(
-        MemberId,
-        ["name", "uid"]
-      );
+      const { name, uid, profile_image } =
+        await rtm__client.getUserAttributesByKeys(MemberId, [
+          "name",
+          "uid",
+          "profile_image",
+        ]);
       console.log("Member left ... :(" + name);
       showInfo(`${name} left the call`);
     } catch (error) {
@@ -247,11 +232,16 @@ const MeetingPage = () => {
   };
 
   const getAndAddMemberDetails = async (memberId) => {
-    const { name, uid } = await rtm__client.getUserAttributesByKeys(memberId, [
-      "name",
-      "uid",
+    const { name, uid, profile_image } =
+      await rtm__client.getUserAttributesByKeys(memberId, [
+        "name",
+        "uid",
+        "profile_image",
+      ]);
+    setMemberDetails((prev) => [
+      ...prev,
+      { name, uid, profile_image, mic__muted: false },
     ]);
-    setMemberDetails((prev) => [...prev, { name, uid, mic__muted: false }]);
   };
 
   const getAllMemberDetails = async () => {
@@ -288,7 +278,7 @@ const MeetingPage = () => {
       uid: uid,
       email: state?.userData?.email,
       time: getTime(),
-      picture: "",
+      picture: state?.userData?.profile_image,
       message: __message,
     };
     setChats((chats) => [...chats, newChat]);

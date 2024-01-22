@@ -45,7 +45,15 @@ const Navbar = () => {
           className="relative sm:flex hidden items-center font-poppins font-medium cursor-pointer text-[18px] text-white ml-10 rounded-md "
           onClick={() => setProfileToggle(!profileToggle)}
         >
-          <img src={profile} alt="" className="w-[25px] mr-2" />
+          <img
+            src={
+              state?.userData?.profile_image
+                ? state?.userData?.profile_image
+                : profile
+            }
+            alt=""
+            className="w-[25px] mr-2 rounded-full"
+          />
           <span className="text-gradient">{state?.userData?.name}</span>
           <img
             src={down}

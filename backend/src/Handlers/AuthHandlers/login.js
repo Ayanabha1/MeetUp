@@ -43,7 +43,12 @@ module.exports.handler = async (event, context) => {
     }
 
     // Generate the jwt Token
-    const userObj = { _id: user._id, name: user.name, email: user.email };
+    const userObj = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profile_image: user?.profile_image,
+    };
     const _token = await generateToken(userObj);
     return sendResponse({
       user: userObj,

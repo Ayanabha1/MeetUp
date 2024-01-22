@@ -1,20 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  micoff,
-  user,
-  logo,
-  person1,
-  person2,
-  person3,
-  cancel,
-} from "../assets";
-
-import MeetControls from "./MeetControls";
-import { Api } from "../Api/Axios";
+import { micoff, profile } from "../assets";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import { Clock10 } from "lucide-react";
-import ChatPortal from "./ChatPortal";
 import { MeetingOverlay } from "./MeetingOverlay";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const RenderOnBigScreen = ({
   name,
@@ -32,6 +21,8 @@ const RenderOnBigScreen = ({
   formatTime,
   duration,
 }) => {
+  const { state } = useDataLayerValue();
+  const { userData } = state;
   return (
     <>
       <div
@@ -52,7 +43,7 @@ const RenderOnBigScreen = ({
           ) : (
             <div className="flex h-full w-full justify-center items-center">
               <img
-                src={person3}
+                src={userData.profile_image ? userData.profile_image : profile}
                 className="min-w-[150px] min-h-[150px] max-h-[250px] max-w-[250px] h-[25vh] w-[25vh] object-cover rounded-[50%]"
               />
             </div>
