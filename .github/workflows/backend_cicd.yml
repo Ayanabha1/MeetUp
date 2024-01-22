@@ -29,10 +29,17 @@ jobs:
           echo "DB_URI=${{ secrets.DB_URI }}" > .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }}" >> .env
+          echo "S3_ACCESS_KEY=${{secrets.S3_ACCESS_KEY}}" >> .env
+          echo "S3_SECRET_KEY=${{secrets.S3_SECRET_KEY}}" >> .env
+          echo "IMAGE_BUCKET_NAME=${{secrets.IMAGE_BUCKET_NAME}}" >> .env
+
         env:
           DB_URI: ${{ secrets.DB_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           AWS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+          IMAGE_BUCKET_NAME: ${{ secrets.IMAGE_BUCKET_NAME }}
 
       - name: Deploy to AWS
         run: |
