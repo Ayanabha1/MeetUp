@@ -43,7 +43,7 @@ module.exports.handler = async (event, context) => {
     }
     const params = {
       Bucket: process.env.IMAGE_BUCKET_NAME,
-      Key: "images/" + userId,
+      Key: "images/" + Date.now() + userId,
       Body: file.content,
       ContentType: file.contentType,
     };
