@@ -1,5 +1,3 @@
-import { connect, secure, chat, person1, person2, person3 } from "../assets";
-
 export const navLinks = [
   {
     id: "home",
@@ -18,21 +16,21 @@ export const navLinks = [
 export const features = [
   {
     id: "feature-1",
-    icon: connect,
+    icon: "https://ik.imagekit.io/Ayanabha1/connect.png?updatedAt=1706025237055",
     title: "Seamless Connections",
     content:
       "The best credit cards offer some tantalizing combinations of promotions and prizes",
   },
   {
     id: "feature-2",
-    icon: secure,
+    icon: "https://ik.imagekit.io/Ayanabha1/secure%20-%20Copy.png?updatedAt=1706025234063",
     title: "100% Secured",
     content:
       "We take proactive steps make sure your information and transactions are secure.",
   },
   {
     id: "feature-3",
-    icon: chat,
+    icon: "https://ik.imagekit.io/Ayanabha1/chat%20-%20Copy.png?updatedAt=1706025236769",
     title: "Chat",
     content:
       "A balance transfer credit card can save you a lot of money in interest charges.",
@@ -46,7 +44,7 @@ export const feedback = [
       "MeetUp surpassed all my expectations, creating warm, close connections with quick setup and reliable calls, becoming essential for sharing precious moments.",
     name: " Mark D.",
     title: "Founder & Leader",
-    img: person2,
+    img: "https://ik.imagekit.io/Ayanabha1/person2%20-%20Copy.jpg?updatedAt=1706025234632",
   },
   {
     id: "feedback-2",
@@ -54,7 +52,7 @@ export const feedback = [
       "MeetUp revolutionized the way our team collaborates! The seamless connection and fast pair up makes virtual meetings a breeze.",
     name: "Sarah J.",
     title: "Project Manager",
-    img: person3,
+    img: "https://ik.imagekit.io/Ayanabha1/person3%20-%20Copy.jpg?updatedAt=1706025234533",
   },
   {
     id: "feedback-3",
@@ -62,7 +60,7 @@ export const feedback = [
       "MeetUp made my virtual events a huge success! It's the perfect platform for webinars and online workshops. Participants loved the smooth connection and engaging features. ",
     name: "Emma W.",
     title: "Event Organizer",
-    img: person1,
+    img: "https://ik.imagekit.io/Ayanabha1/person1%20-%20Copy.jpg?updatedAt=1706025234449",
   },
 ];
 

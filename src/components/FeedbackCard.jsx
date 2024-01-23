@@ -1,7 +1,8 @@
 import React from "react";
-import { quotes } from "../assets";
 
 const FeedbackCard = ({ content, name, title, img, firstCard }) => {
+  const quotes =
+    "https://ik.imagekit.io/Ayanabha1/quotes%20-%20Copy.png?updatedAt=1706025234291";
   return (
     <div
       className={`${
@@ -9,6 +10,7 @@ const FeedbackCard = ({ content, name, title, img, firstCard }) => {
       } flex justify-between flex-col px-10 py-12 rounded-[20px] max-w-[370px] md:mr-10 sm:mr-5 mr-0 my-5 feedback-card`}
     >
       <img
+        loading="lazy"
         src={quotes}
         alt="double_quotes"
         className="w-[42px] object-contain"
@@ -19,6 +21,7 @@ const FeedbackCard = ({ content, name, title, img, firstCard }) => {
 
       <div className="flex flex-row">
         <img
+          loading="lazy"
           src={img}
           alt={name}
           className="w-[48px] h-[48px] rounded-full object-cover"

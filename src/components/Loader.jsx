@@ -1,5 +1,4 @@
 import React from "react";
-import { loader, loader2 } from "../assets";
 import { useState } from "react";
 import { useEffect } from "react";
 

@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles";
 import { Navbar, Hero, Stats, Testimonials, Footer } from "./index";
 import Features from "./Features";
-import { home, feedback, features, user } from "../assets";
 import { Link } from "react-router-dom";
 
 const HomeDock = () => {
+  const home =
+    "https://ik.imagekit.io/Ayanabha1/home%20-%20Copy.png?updatedAt=1706025236870";
+  const feedback =
+    "https://ik.imagekit.io/Ayanabha1/feedback%20-%20Copy.png?updatedAt=1706025237199";
+  const features =
+    "https://ik.imagekit.io/Ayanabha1/features%20-%20Copy.png?updatedAt=1706025237106";
+  const user =
+    "https://ik.imagekit.io/Ayanabha1/user.png?updatedAt=1706025234288";
+
   const [sidebarVis, setSidebarVis] = useState(false);
   const appearSidebar = () => {
     if (window.scrollY >= 300) {
@@ -28,16 +36,16 @@ const HomeDock = () => {
     <div className="App-Dock bg-primary w-full h-full overflow-hidden">
       <div className={`sidebar-nav ${sidebarVis && "sidebar-nav-appear"}`}>
         <a href="#">
-          <img src={home} alt="" />
+          <img loading="lazy" src={home} alt="home" />
         </a>
         <a href="#features">
-          <img src={features} alt="" />
+          <img loading="lazy" src={features} alt="features" />
         </a>
         <a href="#feedbacks">
-          <img src={feedback} alt="" />
+          <img loading="lazy" src={feedback} alt="feedback" />
         </a>
         <Link to="/profile">
-          <img src={user} alt="" />
+          <img loading="lazy" src={user} alt="profile" />
         </Link>
       </div>
       <div className={`${styles.paddingX} ${styles.flexCenter}`}>

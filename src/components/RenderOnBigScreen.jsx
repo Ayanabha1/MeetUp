@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { micoff, profile } from "../assets";
+import React from "react";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import { Clock10 } from "lucide-react";
 import { MeetingOverlay } from "./MeetingOverlay";
@@ -25,6 +24,10 @@ const RenderOnBigScreen = ({
 }) => {
   const { state } = useDataLayerValue();
   const { userData } = state;
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
+  const micoff =
+    "https://ik.imagekit.io/Ayanabha1/micoff.png?updatedAt=1706031484472";
   return (
     <>
       <div

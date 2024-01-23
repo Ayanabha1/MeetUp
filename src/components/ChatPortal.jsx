@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { person2, person3, cancel, profile } from "../assets";
 import { X, Send, ChevronDown } from "lucide-react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 
@@ -8,7 +7,11 @@ const SelfChat = ({ chat, image }) => {
     <div className="flex flex-col justify-end  w-full items-end">
       <div className="flex flex-col max-w-[88%] gap-[10px]">
         <div className="flex gap-2 justify-start items-start w-full">
-          <img src={image} className="h-[40px] w-[40px] rounded-full" />
+          <img
+            loading="lazy"
+            src={image}
+            className="h-[40px] w-[40px] rounded-full"
+          />
           <span>You</span>
           <div className="text-[rgba(0,0,0,0.55)] flex gap-2">
             <span>•</span>
@@ -29,7 +32,11 @@ const OthersChat = ({ chat, image }) => {
     <div className="flex flex-col justify-end  w-full items-start">
       <div className="flex flex-col max-w-[88%] gap-[10px]">
         <div className="flex gap-2 justify-start items-start w-full">
-          <img src={image} className="h-[40px] w-10 rounded-full" />
+          <img
+            loading="lazy"
+            src={image}
+            className="h-[40px] w-10 rounded-full"
+          />
           <span>{chat?.name}</span>
           <div className="text-[rgba(0,0,0,0.55)] flex gap-2">
             <span>•</span>
@@ -58,6 +65,8 @@ const ChatPortal = ({
   const { state } = useDataLayerValue();
   const chatBoxRef = useRef();
   const [showDonwBtn, setShowDonwBtn] = useState(false);
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
 
   const handleShowDownBtn = () => {
     const targetHeight =
@@ -142,6 +151,7 @@ const ChatPortal = ({
           onChange={(e) => handleChangeMessage(e.target.value)}
         />
         <img
+          loading="lazy"
           src={state?.userData?.profile_image || profile}
           className="h-[80%] w-10 absolute top-[50%] translate-y-[-50%] rounded-full left-[5px]"
         />

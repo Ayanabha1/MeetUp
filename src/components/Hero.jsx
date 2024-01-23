@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "../styles";
-import { her1_new } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
@@ -139,7 +138,8 @@ const Hero = () => {
           className="w-[80%] h-[80%] relative z-[5]"
         >
           <img
-            src={her1_new}
+            loading="lazy"
+            src="https://ik.imagekit.io/Ayanabha1/her1_new%20-%20Copy.png"
             alt="hero image"
             className="h-full w-full xs:w-[90%]"
           />
