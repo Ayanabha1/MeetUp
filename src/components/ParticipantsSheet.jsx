@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { profile } from "../assets";
 import { X, Users, Search } from "lucide-react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 
@@ -10,9 +9,10 @@ const ParticipantsSheet = ({
   toggleParticipants,
 }) => {
   const { state } = useDataLayerValue();
-  const chatBoxRef = useRef();
   const [searchList, setSearchList] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
 
   const handleSearch = (name) => {
     setSearchKey(name);

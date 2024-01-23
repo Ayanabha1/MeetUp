@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logo } from "../assets";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 import { ChevronLeft } from "lucide-react";
 
 const Signup = () => {
+  const logo =
+    "https://ik.imagekit.io/Ayanabha1/logo%20-%20Copy.png?updatedAt=1706025236906";
   const [signupData, setSignupData] = useState({});
   const { signupFunc } = useDataLayerValue();
   const navigate = useNavigate();

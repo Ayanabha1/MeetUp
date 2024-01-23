@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import { AgoraVideoPlayer } from "agora-rtc-react";
-import { profile } from "../assets";
 import MeetControls from "./MeetControls";
 import ChatPortal from "./ChatPortal";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
@@ -15,11 +13,11 @@ const SpotLightFeed = ({ videoTrack, videoMuted, image }) => {
   } else {
     return (
       <div
-        className={`h-full w-full object-contain flex justify-center items-center overflow-hidden`}
+        className={`bg-black h-full w-full object-contain flex justify-center items-center overflow-hidden`}
       >
         <img
           src={image}
-          className="w-[25%] h-[25%] object-cover rounded-[50%]"
+          className="w-[15vh] h-[15vh] object-cover rounded-[50%]"
         />
       </div>
     );
@@ -48,6 +46,8 @@ const RenderOnSmallScreen = ({
   const [spotLight, setSpotLight] = useState(null);
   const { state } = useDataLayerValue();
   const { userData } = state;
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
 
   const setSpotlightSlot = (user) => {
     setSpotLight(user);
@@ -105,7 +105,7 @@ const RenderOnSmallScreen = ({
                   className={`h-full w-full`}
                 />
               ) : (
-                <div className="flex justify-center items-center h-full w-full">
+                <div className="bg-black flex justify-center items-center h-full w-full">
                   <img
                     src={userData?.profile_image || profile}
                     className="w-[25%] h-[25%] object-cover rounded-[50%]"
@@ -132,10 +132,10 @@ const RenderOnSmallScreen = ({
                       className={`h-full w-full`}
                     />
                   ) : (
-                    <div className="flex justify-center items-center h-full w-full">
+                    <div className="bg-black  flex justify-center items-center h-full w-full">
                       <img
                         src={user?.profile_image || profile}
-                        className="w-[25%] h-[25%] object-cover rounded-[50%]"
+                        className="w-[7vh] h-[7vh] object-cover rounded-[50%]"
                       />
                     </div>
                   )}

@@ -11,7 +11,12 @@ const FeatureCard = ({ icon, title, content, index }) => (
     <div
       className={`w-[64px] h-[64px] ${styles.flexCenter} rounded-full bg-dimBlue`}
     >
-      <img src={icon} alt="icon" className="w-[30px] object-contain" />
+      <img
+        loading="lazy"
+        src={icon}
+        alt="icon"
+        className="w-[30px] object-contain"
+      />
     </div>
     <div className="flex-1 flex flex-col ml-3">
       <h4 className="font-poppins font-semibold text-white text-[18px] leading-[23px] mb-1 ">
@@ -51,7 +56,7 @@ const Features = () => {
           <Button styles="mt-10" />
         </div>
       </div>
-      
+
       <div className={`${layout.sectionImg} flex-col mt-[100px] md:mt-0`}>
         <Fade
           cascade

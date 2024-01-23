@@ -1,13 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  micoff,
-  logo,
-  person1,
-  person2,
-  person3,
-  cancel,
-  profile,
-} from "../assets";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
 import ChatPortal from "./ChatPortal";
@@ -21,6 +12,8 @@ const ParticipantTracks = ({
   channelRef,
   uid,
 }) => {
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
   return (
     <div className="absolute top-0 right-0 h-[98%] min-w-[25vw]  p-2 flex flex-col gap-1">
       {/* More participants */}

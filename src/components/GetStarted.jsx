@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "../styles";
-import { topRight } from "../assets";
 
 const GetStarted = () => {
+  const topRight =
+    "https://ik.imagekit.io/Ayanabha1/top-right.png?updatedAt=1706032517366";
   return (
     <div
       className={`${styles.flexCenter} w-[140px] h-[140px] rounded-full bg-blue-gradient p-[2px] cursor-pointer`}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { logo, menu, close, profile, down } from "../assets";
 import { navLinks } from "../constants";
 import { Link, useNavigate } from "react-router-dom";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
@@ -7,10 +6,16 @@ import { useDataLayerValue } from "../Datalayer/DataLayer";
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   const [profileToggle, setProfileToggle] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const { state, logoutFunc } = useDataLayerValue();
   const navigate = useNavigate();
-
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
+  const down =
+    "https://ik.imagekit.io/Ayanabha1/down.png?updatedAt=1706025827496";
+  const menu =
+    "https://ik.imagekit.io/Ayanabha1/menu.svg?updatedAt=1706025907074";
+  const close =
+    "https://ik.imagekit.io/Ayanabha1/close.png?updatedAt=1706025992615";
   const handleLogoutClick = () => {
     logoutFunc();
   };
@@ -26,7 +31,12 @@ const Navbar = () => {
   return (
     <nav className="w-full flex py-6 justify-between items-center mavbar z-50">
       <Link to="/">
-        <img src={logo} alt="meetup" className="w-[124px] h-[45px]" />
+        <img
+          loading="lazy"
+          src="https://ik.imagekit.io/Ayanabha1/logo%20-%20Copy.png?updatedAt=1706025236906"
+          alt="meetup"
+          className="w-[124px] h-[45px]"
+        />
       </Link>
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">
         {navLinks.map((nav, i) => (
@@ -52,7 +62,7 @@ const Navbar = () => {
                 : profile
             }
             alt=""
-            className="w-[25px] mr-2 rounded-full"
+            className="w-[35px] h-[35px] object-cover mr-2 rounded-full"
           />
           <span className="text-gradient">{state?.userData?.name}</span>
           <img

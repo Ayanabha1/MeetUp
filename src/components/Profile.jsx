@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
-import { profile } from "../assets";
 import { Api } from "../Api/Axios";
 import { Pencil, ChevronLeft } from "lucide-react";
 import axios from "axios";
@@ -63,6 +62,8 @@ const Profile = () => {
     changeLoginState,
   } = useDataLayerValue();
   const { userData } = state;
+  const profile =
+    "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
   const [profileImage, setProfileImage] = useState(profile);
   const [meetings, setMeetings] = useState([]);
   const navigate = useNavigate();
