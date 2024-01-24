@@ -35,7 +35,7 @@ const MeetingPage = () => {
 
   const init = async (roomName) => {
     // RTM
-
+    document.title = `${roomName} - Meetup`;
     try {
       await rtm__client.login({ uid });
       await rtm__client.addOrUpdateLocalUserAttributes({

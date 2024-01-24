@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
-import ChatPortal from "./ChatPortal";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 import ParticipantsSheet from "./ParticipantsSheet";
+import ChatDock from "./ChatDock";
 
 const SpotLightFeed = ({ videoTrack, videoMuted, image }) => {
   if (!videoMuted && videoTrack) {
@@ -132,7 +132,7 @@ const RenderOnSmallScreen = ({
                       className={`h-full w-full`}
                     />
                   ) : (
-                    <div className="bg-black  flex justify-center items-center h-full w-full">
+                    <div className="bg-black flex justify-center items-center h-full w-full">
                       <img
                         src={user?.profile_image || profile}
                         className="w-[7vh] h-[7vh] object-cover rounded-[50%]"
@@ -163,7 +163,7 @@ const RenderOnSmallScreen = ({
           chatOpen ? "z-[20] h-[95%]" : "z-[-10] h-0"
         } transition-all duration-300`}
       >
-        <ChatPortal
+        <ChatDock
           chatOpen={chatOpen}
           chats={chats}
           handleChangeMessage={handleChangeMessage}

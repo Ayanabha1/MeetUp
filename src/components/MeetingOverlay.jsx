@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
-import ChatPortal from "./ChatPortal";
 import ParticipantsSheet from "./ParticipantsSheet";
+import ChatDock from "./ChatDock";
 
 const ParticipantTracks = ({
   tracks,
@@ -150,7 +150,7 @@ export const MeetingOverlay = ({
             participantsOpen ? (chatOpen ? "h-[50%]" : "h-0") : "h-full"
           }`}
         >
-          <ChatPortal
+          <ChatDock
             chatOpen={chatOpen}
             toggleChat={toggleChat}
             chats={chats}

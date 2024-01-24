@@ -74,7 +74,7 @@ const ParticipantsSheet = ({
             <div className="flex gap-2 items-center">
               <img
                 src={state?.userData?.profile_image || profile}
-                className="h-10 w-10 rounded-full"
+                className="h-10 w-10 rounded-full object-cover"
               />
               <span className="text-lg">{state?.userData?.name} (You)</span>
             </div>
@@ -82,7 +82,7 @@ const ParticipantsSheet = ({
               <div className="flex gap-2 items-center" key={i}>
                 <img
                   src={user?.profile_image || profile}
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-full object-cover"
                 />
                 <span className="text-lg">{user?.name || "User"}</span>
               </div>
