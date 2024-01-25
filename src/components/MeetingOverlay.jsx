@@ -93,6 +93,7 @@ export const MeetingOverlay = ({
   channelRef,
   uid,
   chats,
+  polls,
   toggleChat,
   chatOpen,
   newMessage,
@@ -100,6 +101,7 @@ export const MeetingOverlay = ({
   sendMessage,
   toggleParticipants,
   participantsOpen,
+  sendPoll,
 }) => {
   return (
     <div className=" absolute top-0 left-0 w-full h-full flex transition-all duration-300">
@@ -158,6 +160,8 @@ export const MeetingOverlay = ({
             sendMessage={sendMessage}
             handleChangeMessage={handleChangeMessage}
             uid={uid}
+            sendPoll={sendPoll}
+            polls={polls}
           />
         </div>
       </div>

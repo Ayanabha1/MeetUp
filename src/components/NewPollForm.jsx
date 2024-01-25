@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 const NewPollForm = ({ createPoll, closePollForm }) => {
   const optionLimit = 10;
   const [prompt, setPrompt] = useState("");
@@ -9,7 +10,7 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
       option: "",
     },
   ]);
-
+  const { state } = useDataLayerValue();
   const changePrompt = (val) => {
     setPrompt(val);
   };
@@ -46,6 +47,24 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
     setOptions(optionsTemp);
   };
 
+  const getTime = () => {
+    const d = new Date();
+    const hours = d.getHours();
+    const minutes = d.getMinutes();
+    const seconds = d.getSeconds();
+
+    let formattedHours = hours % 12;
+    if (formattedHours === 0) {
+      formattedHours = 12;
+    }
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    return `${formattedHours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")} ${ampm}`;
+  };
+
   const submitForm = () => {
     if (prompt === "") {
       // Show error please enter a prompt
@@ -66,16 +85,24 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
       console.log("empty options not allowed");
       return;
     }
-
-    const __options = options.map((op) => ({
+    const d = new Date();
+    const timeInMs = d.getMilliseconds();
+    const __options = options.map((op, i) => ({
       option: op.option?.trim(),
       votes: 0,
+      id: i,
     }));
 
+    const sender = state?.userData?.name;
+    const sender_image = state?.userData?.profile_image;
     const newForm = {
+      id: `${timeInMs}_${__options.length}`,
+      sender: sender,
+      sender_image: sender_image,
+      time: getTime(),
       prompt: prompt,
       options: __options,
-      totalVotes: 0,
+      total_votes: 0,
     };
     createPoll(newForm);
     closePollForm();
@@ -83,7 +110,7 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
 
   return (
     <form
-      className="flex flex-col gap-2 border rounded-md p-2"
+      className="flex flex-col gap-2 border rounded-md p-4 shadow-md"
       onSubmit={(e) => {
         e.preventDefault();
         submitForm();
@@ -92,28 +119,30 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
       {/* Question */}
 
       <div>
-        <label htmlFor="prompt" className="font-semibold">
+        <label
+          htmlFor="prompt"
+          className="font-semibold text-[rgba(0,0,0,0.75)] text-[18px]"
+        >
           Prompt
         </label>
         <input
           id="prompt"
           type="text"
-          className="w-full border p-1 rounded-md"
+          className="w-full border p-2 rounded-md mt-[10px]"
           placeholder="Please enter your prompt"
           onChange={(e) => changePrompt(e.target.value)}
         />
       </div>
 
       {/* Options */}
-      <span>Options</span>
+      <span className="text-[18px]">Options</span>
 
       {options.map((option, i) => (
-        <div className="flex items-center gap-2">
-          <span>{i + 1}. </span>
+        <div key={i} className="flex items-center gap-2">
           <input
             key={i}
             type="text"
-            className="w-full border rounded-md p-1"
+            className="w-full border p-2 rounded-md "
             placeholder={`Option ${option?.index + 1}`}
             value={options[i].option}
             onChange={(e) => {
@@ -131,7 +160,7 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
         </div>
       ))}
       <button
-        className="p-1 w-full shadow-md active:shadow-[inset_0_0px_4px_rgba(0,0,0,0.2)] border rounded-md"
+        className="p-2  w-full shadow-md active:shadow-[inset_0_0px_4px_rgba(0,0,0,0.2)] border rounded-md"
         onClick={addOption}
         type="button"
       >
@@ -147,7 +176,7 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
           Send
         </button>
         <button
-          className="p-1 text-md  shadow-md active:shadow-[inset_0_0px_4px_rgba(0,0,0,0.2)] flex-[0.5] rounded-tl-md rounded-bl-md border"
+          className="p-1 text-md  shadow-md active:shadow-[inset_0_0px_4px_rgba(0,0,0,0.2)] flex-[0.5] rounded-tr-md rounded-br-md border"
           onClick={closePollForm}
           type="button"
         >

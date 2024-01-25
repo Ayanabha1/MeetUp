@@ -16,7 +16,9 @@ const RenderOnBigScreen = ({
   newMessage,
   handleChangeMessage,
   sendMessage,
+  sendPoll,
   chats,
+  polls,
   formatTime,
   duration,
   participantsOpen,
@@ -77,8 +79,10 @@ const RenderOnBigScreen = ({
         handleChangeMessage={handleChangeMessage}
         sendMessage={sendMessage}
         chats={chats}
+        polls={polls}
         participantsOpen={participantsOpen}
         toggleParticipants={toggleParticipants}
+        sendPoll={sendPoll}
       />
     </>
   );

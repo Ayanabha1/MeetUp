@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { X, Send, ChevronDown } from "lucide-react";
-import { useDataLayerValue } from "../Datalayer/DataLayer";
+import React, { useState } from "react";
+import { X } from "lucide-react";
 import ChatPortal from "./ChatPortal";
 import PollsPortal from "./PollsPortal";
 
@@ -12,6 +11,8 @@ const ChatDock = ({
   sendMessage,
   toggleChat,
   uid,
+  sendPoll,
+  polls,
 }) => {
   const [openSection, setOpenSection] = useState("chat");
 
@@ -62,7 +63,7 @@ const ChatDock = ({
           uid={uid}
         />
       ) : (
-        <PollsPortal />
+        <PollsPortal sendPoll={sendPoll} polls={polls} />
       )}
     </div>
   );

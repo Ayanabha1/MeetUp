@@ -27,6 +27,7 @@ const MeetingPage = () => {
   let channelRef = useRef();
   const [memberDetails, setMemberDetails] = useState([]);
   const [chats, setChats] = useState([]);
+  const [polls, setPolls] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [duration, setDuration] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
@@ -258,8 +259,9 @@ const MeetingPage = () => {
     console.log("Message Recieved");
     let data = JSON.parse(messageData.text);
     if (data.type === "chat") {
-      console.log(data);
       setChats((chats) => [...chats, data]);
+    } else if (data.type === "poll") {
+      setPolls((polls) => [...polls, data]);
     }
   };
 
@@ -288,6 +290,12 @@ const MeetingPage = () => {
     channelRef.current.sendMessage({ text: JSON.stringify(newChat) });
     handleChangeMessage("");
     // console.log("first");
+  };
+
+  const sendPoll = (pollData) => {
+    const newPoll = { ...pollData, type: "poll" };
+    setPolls((prev) => [...prev, pollData]);
+    channelRef.current.sendMessage({ text: JSON.stringify(newPoll) });
   };
 
   useEffect(() => {
@@ -336,6 +344,7 @@ const MeetingPage = () => {
           channelRef={channelRef}
           chatOpen={chatOpen}
           chats={chats}
+          polls={polls}
           formatTime={formatTime}
           handleChangeMessage={handleChangeMessage}
           memberDetails={memberDetails}
@@ -343,6 +352,7 @@ const MeetingPage = () => {
           newMessage={newMessage}
           participants={participants}
           sendMessage={sendMessage}
+          sendPoll={sendPoll}
           toggleChat={toggleChat}
           toggleParticipants={toggleParticipants}
           participantsOpen={participantsOpen}
@@ -355,6 +365,7 @@ const MeetingPage = () => {
           channelRef={channelRef}
           chatOpen={chatOpen}
           chats={chats}
+          polls={polls}
           formatTime={formatTime}
           handleChangeMessage={handleChangeMessage}
           memberDetails={memberDetails}
@@ -362,6 +373,7 @@ const MeetingPage = () => {
           newMessage={newMessage}
           participants={participants}
           sendMessage={sendMessage}
+          sendPoll={sendPoll}
           toggleChat={toggleChat}
           toggleParticipants={toggleParticipants}
           participantsOpen={participantsOpen}

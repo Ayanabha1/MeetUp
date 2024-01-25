@@ -38,7 +38,9 @@ const RenderOnSmallScreen = ({
   newMessage,
   handleChangeMessage,
   sendMessage,
+  sendPoll,
   chats,
+  polls,
   formatTime,
   duration,
 }) => {
@@ -171,6 +173,8 @@ const RenderOnSmallScreen = ({
           sendMessage={sendMessage}
           toggleChat={toggleChat}
           uid={uid}
+          polls={polls}
+          sendPoll={sendPoll}
         />
       </div>
 
