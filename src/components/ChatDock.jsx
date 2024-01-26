@@ -14,6 +14,7 @@ const ChatDock = ({
   sendPoll,
   polls,
   selectPollOption,
+  sendFile,
   participants,
 }) => {
   const [openSection, setOpenSection] = useState("chat");
@@ -63,6 +64,7 @@ const ChatDock = ({
           sendMessage={sendMessage}
           toggleChat={toggleChat}
           uid={uid}
+          sendFile={sendFile}
         />
       ) : (
         <PollsPortal

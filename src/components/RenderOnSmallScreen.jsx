@@ -44,6 +44,7 @@ const RenderOnSmallScreen = ({
   formatTime,
   duration,
   selectPollOption,
+  sendFile,
 }) => {
   const [people, setPeople] = useState(1);
   const [spotLight, setSpotLight] = useState(null);
@@ -178,6 +179,7 @@ const RenderOnSmallScreen = ({
           polls={polls}
           selectPollOption={selectPollOption}
           participants={participants}
+          sendFile={sendFile}
         />
       </div>
 

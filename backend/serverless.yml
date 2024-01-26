@@ -70,3 +70,9 @@ functions:
       - httpApi:
           path: /api/v1/uploadImage
           method: POST
+  uploadDoc:
+    handler: src/Handlers/FileUploadHandlers/DocUploadHandler.handler
+    events:
+      - httpApi:
+          path: /api/v1/uploadDoc
+          method: POST

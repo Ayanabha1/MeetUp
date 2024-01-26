@@ -24,6 +24,7 @@ const RenderOnBigScreen = ({
   participantsOpen,
   toggleParticipants,
   selectPollOption,
+  sendFile,
 }) => {
   const { state } = useDataLayerValue();
   const { userData } = state;
@@ -85,6 +86,7 @@ const RenderOnBigScreen = ({
         toggleParticipants={toggleParticipants}
         sendPoll={sendPoll}
         selectPollOption={selectPollOption}
+        sendFile={sendFile}
       />
     </>
   );
