@@ -16,11 +16,14 @@ const RenderOnBigScreen = ({
   newMessage,
   handleChangeMessage,
   sendMessage,
+  sendPoll,
   chats,
+  polls,
   formatTime,
   duration,
   participantsOpen,
   toggleParticipants,
+  selectPollOption,
 }) => {
   const { state } = useDataLayerValue();
   const { userData } = state;
@@ -77,8 +80,11 @@ const RenderOnBigScreen = ({
         handleChangeMessage={handleChangeMessage}
         sendMessage={sendMessage}
         chats={chats}
+        polls={polls}
         participantsOpen={participantsOpen}
         toggleParticipants={toggleParticipants}
+        sendPoll={sendPoll}
+        selectPollOption={selectPollOption}
       />
     </>
   );

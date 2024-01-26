@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
-import ChatPortal from "./ChatPortal";
 import ParticipantsSheet from "./ParticipantsSheet";
+import ChatDock from "./ChatDock";
 
 const ParticipantTracks = ({
   tracks,
@@ -93,6 +93,7 @@ export const MeetingOverlay = ({
   channelRef,
   uid,
   chats,
+  polls,
   toggleChat,
   chatOpen,
   newMessage,
@@ -100,6 +101,8 @@ export const MeetingOverlay = ({
   sendMessage,
   toggleParticipants,
   participantsOpen,
+  sendPoll,
+  selectPollOption,
 }) => {
   return (
     <div className=" absolute top-0 left-0 w-full h-full flex transition-all duration-300">
@@ -150,7 +153,7 @@ export const MeetingOverlay = ({
             participantsOpen ? (chatOpen ? "h-[50%]" : "h-0") : "h-full"
           }`}
         >
-          <ChatPortal
+          <ChatDock
             chatOpen={chatOpen}
             toggleChat={toggleChat}
             chats={chats}
@@ -158,6 +161,10 @@ export const MeetingOverlay = ({
             sendMessage={sendMessage}
             handleChangeMessage={handleChangeMessage}
             uid={uid}
+            sendPoll={sendPoll}
+            polls={polls}
+            selectPollOption={selectPollOption}
+            participants={participants}
           />
         </div>
       </div>

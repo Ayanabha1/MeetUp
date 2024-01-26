@@ -10,7 +10,7 @@ const SelfChat = ({ chat, image }) => {
           <img
             loading="lazy"
             src={image}
-            className="h-[40px] w-[40px] rounded-full"
+            className="h-[40px] w-[40px] object-cover rounded-full"
           />
           <span>You</span>
           <div className="text-[rgba(0,0,0,0.55)] flex gap-2">
@@ -29,13 +29,13 @@ const SelfChat = ({ chat, image }) => {
 };
 const OthersChat = ({ chat, image }) => {
   return (
-    <div className="flex flex-col justify-end  w-full items-start">
+    <div className="flex flex-col justify-end w-full items-start">
       <div className="flex flex-col max-w-[88%] gap-[10px]">
         <div className="flex gap-2 justify-start items-start w-full">
           <img
             loading="lazy"
             src={image}
-            className="h-[40px] w-10 rounded-full"
+            className="h-[40px] w-10 rounded-full object-cover"
           />
           <span>{chat?.name}</span>
           <div className="text-[rgba(0,0,0,0.55)] flex gap-2">
@@ -93,9 +93,7 @@ const ChatPortal = ({
 
   return (
     <div
-      className={`${
-        chatOpen ? "opacity-100 h-full" : "opacity-0 h-0"
-      }  m-3 p-5 bg-white  overflow-hidden transition-all duration-300 rounded-xl text-black flex flex-col relative`}
+      className={`overflow-hidden transition-all duration-300 rounded-xl text-black flex flex-col relative h-full`}
     >
       {/* Go down btn */}
       <button
@@ -107,13 +105,6 @@ const ChatPortal = ({
         <ChevronDown color="rgba(0,0,0,0.6)" />
       </button>
 
-      {/* Head */}
-      <h1 className="text-xl font-semibold flex justify-between items-center border-b border-b-[rgba(0,0,0,0.25)] pb-2">
-        <span>Live Chat</span>
-        <button onClick={toggleChat}>
-          <X />
-        </button>
-      </h1>
       <div
         className="flex flex-col mt-10 pb-10 h-[80%] gap-[30px] overflow-y-scroll overflow-x-hidden"
         ref={chatBoxRef}
@@ -153,7 +144,7 @@ const ChatPortal = ({
         <img
           loading="lazy"
           src={state?.userData?.profile_image || profile}
-          className="h-[80%] w-10 absolute top-[50%] translate-y-[-50%] rounded-full left-[5px]"
+          className="h-[80%] object-cover w-10 absolute top-[50%] translate-y-[-50%] rounded-full left-[5px]"
         />
         <button
           type="submit"
