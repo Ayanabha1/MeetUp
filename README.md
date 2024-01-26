@@ -1,6 +1,6 @@
 # MeetUp - Video Conferencing App
 
-![image](https://github.com/Ayanabha1/MeetUp/assets/63809278/006aa513-c2ba-4d0b-8d5c-2822512f0fa5)
+![image](https://github.com/Ayanabha1/MeetUp/assets/63809278/e6e490d5-47e8-4c35-bf47-40cda95aaa5e)
 
 ## 🔗 Link
 
