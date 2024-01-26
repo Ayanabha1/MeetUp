@@ -103,6 +103,7 @@ const NewPollForm = ({ createPoll, closePollForm }) => {
       prompt: prompt,
       options: __options,
       total_votes: 0,
+      selected: -1,
     };
     createPoll(newForm);
     closePollForm();

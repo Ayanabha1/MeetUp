@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import NewPollForm from "./NewPollForm";
+import ProgressBar from "./ProgressBar";
 
-const Poll = ({ data }) => {
-  const getPercentage = () => {
-    return "80%";
+const Poll = ({ data, selectPollOption, participants }) => {
+  const handleChangeOption = (pollData, optionId) => {
+    selectPollOption(pollData, optionId);
   };
+
+  const getPercentage = (votes, total_votes) => {
+    if (votes === 0) {
+      return 0;
+    }
+    let total = Math.max(participants.length + 1, total_votes);
+
+    return Math.floor((votes / total) * 100);
+  };
+
   return (
     <div>
       {/* sender info */}
@@ -25,29 +36,38 @@ const Poll = ({ data }) => {
 
         <div className="flex flex-col gap-2">
           {data?.options?.map((op, i) => (
-            <div
-              key={i}
-              className={`z-[10] radio-button-outer-container ml-[10px] mb-[12px] after:w-[${getPercentage()}]`}
-            >
-              <label key={i} className={`z-[20] radio-button-container `}>
-                <input
-                  type="radio"
-                  id={`${op?.id}_${data?.id}`}
-                  name={`poll_option_${data?.id}`}
-                />
-                <span className="checkmark"></span>
-                <p className="max-w-[80%] break-words">{op.option}</p>
-                <span className="ml-auto">{getPercentage()}</span>
-              </label>
+            <div key={i}>
+              <ProgressBar
+                completed={getPercentage(op?.votes, data?.total_votes)}
+              >
+                <div key={i} className={`z-[10] radio-button-outer-container`}>
+                  <label key={i} className={`z-[20] radio-button-container `}>
+                    <input
+                      type="radio"
+                      id={`${op?.id}_${data?.id}`}
+                      name={`poll_option_${data?.id}`}
+                      onClick={() => handleChangeOption(data, op?.id)}
+                    />
+                    <span className="checkmark"></span>
+                    <p className="max-w-[80%] break-words">{op.option}</p>
+                    <span className="ml-auto">
+                      {`${getPercentage(op?.votes, data?.total_votes)}%`}
+                    </span>
+                  </label>
+                </div>
+              </ProgressBar>
             </div>
           ))}
+          <span className="ml-[10px] text-sm text-[rgba(0,0,0,0.55)]">
+            {data?.total_votes} votes
+          </span>
         </div>
       </div>
     </div>
   );
 };
 
-const PollsPortal = ({ sendPoll, polls }) => {
+const PollsPortal = ({ sendPoll, polls, selectPollOption, participants }) => {
   const [newPollFormOpen, setNewPollFormOpen] = useState(false);
   const openPollForm = () => {
     setNewPollFormOpen(true);
@@ -63,9 +83,14 @@ const PollsPortal = ({ sendPoll, polls }) => {
   return (
     <div className="mt-10 flex flex-col h-[90%] justify-between overflow-scroll">
       {/* Polls will go here */}
-      <div className="h-[90%] flex flex-col gap-4 overflow-scroll pb-2">
+      <div className="h-[90%] flex flex-col gap-10 overflow-scroll pb-2">
         {polls.map((poll, i) => (
-          <Poll data={poll} key={i} />
+          <Poll
+            data={poll}
+            selectPollOption={selectPollOption}
+            participants={participants}
+            key={i}
+          />
         ))}
 
         {newPollFormOpen && (

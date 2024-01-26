@@ -13,6 +13,8 @@ const ChatDock = ({
   uid,
   sendPoll,
   polls,
+  selectPollOption,
+  participants,
 }) => {
   const [openSection, setOpenSection] = useState("chat");
 
@@ -63,7 +65,12 @@ const ChatDock = ({
           uid={uid}
         />
       ) : (
-        <PollsPortal sendPoll={sendPoll} polls={polls} />
+        <PollsPortal
+          sendPoll={sendPoll}
+          polls={polls}
+          selectPollOption={selectPollOption}
+          participants={participants}
+        />
       )}
     </div>
   );

@@ -102,6 +102,7 @@ export const MeetingOverlay = ({
   toggleParticipants,
   participantsOpen,
   sendPoll,
+  selectPollOption,
 }) => {
   return (
     <div className=" absolute top-0 left-0 w-full h-full flex transition-all duration-300">
@@ -162,6 +163,8 @@ export const MeetingOverlay = ({
             uid={uid}
             sendPoll={sendPoll}
             polls={polls}
+            selectPollOption={selectPollOption}
+            participants={participants}
           />
         </div>
       </div>

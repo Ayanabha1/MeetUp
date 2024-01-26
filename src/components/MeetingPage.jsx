@@ -155,30 +155,6 @@ const MeetingPage = () => {
       .padStart(2, "0")} ${ampm}`;
   };
 
-  const getDate = () => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const d = new Date();
-    const date = d.getDate();
-    const month = d.getMonth();
-    const year = d.getFullYear();
-
-    return `${date} ${months[month]}, ${year}`;
-  };
-
   const toggleChat = () => {
     setChatOpen(!chatOpen);
   };
@@ -256,12 +232,23 @@ const MeetingPage = () => {
   };
 
   const handleRecieveMessage = async (messageData, MemberId) => {
-    console.log("Message Recieved");
     let data = JSON.parse(messageData.text);
     if (data.type === "chat") {
       setChats((chats) => [...chats, data]);
     } else if (data.type === "poll") {
       setPolls((polls) => [...polls, data]);
+    } else if (data.type === "poll_change") {
+      console.log(data);
+
+      setPolls((prev) =>
+        prev.map((poll) => {
+          if (poll.id === data.id) {
+            poll.options = data.options;
+            poll.total_votes = data.total_votes;
+          }
+          return poll;
+        })
+      );
     }
   };
 
@@ -290,6 +277,35 @@ const MeetingPage = () => {
     channelRef.current.sendMessage({ text: JSON.stringify(newChat) });
     handleChangeMessage("");
     // console.log("first");
+  };
+
+  const selectPollOption = (pollData, newOptionId) => {
+    const __data = pollData;
+    const prev_op_id = __data?.selected;
+    if (prev_op_id === -1) {
+      __data.total_votes = __data.total_votes + 1;
+    }
+    __data.selected = newOptionId;
+    __data?.options.map((op) => {
+      if (prev_op_id != -1 && op.id === prev_op_id) {
+        op.votes = Math.max(op.votes - 1, 0);
+      }
+      if (op.id === newOptionId) {
+        op.votes = op.votes + 1;
+      }
+      return op;
+    });
+
+    const __polls = polls;
+    __polls?.map((poll) => (poll?.id === __data?.id ? __data : poll));
+    setPolls(__polls);
+    const newData = {
+      id: __data.id,
+      options: __data.options,
+      type: "poll_change",
+      total_votes: __data.total_votes,
+    };
+    channelRef.current.sendMessage({ text: JSON.stringify(newData) });
   };
 
   const sendPoll = (pollData) => {
@@ -359,6 +375,7 @@ const MeetingPage = () => {
           tracks={tracks}
           uid={uid}
           duration={duration}
+          selectPollOption={selectPollOption}
         />
       ) : (
         <RenderOnSmallScreen
@@ -380,6 +397,7 @@ const MeetingPage = () => {
           tracks={tracks}
           uid={uid}
           duration={duration}
+          selectPollOption={selectPollOption}
         />
       )}
     </div>

@@ -43,6 +43,7 @@ const RenderOnSmallScreen = ({
   polls,
   formatTime,
   duration,
+  selectPollOption,
 }) => {
   const [people, setPeople] = useState(1);
   const [spotLight, setSpotLight] = useState(null);
@@ -167,14 +168,16 @@ const RenderOnSmallScreen = ({
       >
         <ChatDock
           chatOpen={chatOpen}
+          toggleChat={toggleChat}
           chats={chats}
-          handleChangeMessage={handleChangeMessage}
           newMessage={newMessage}
           sendMessage={sendMessage}
-          toggleChat={toggleChat}
+          handleChangeMessage={handleChangeMessage}
           uid={uid}
-          polls={polls}
           sendPoll={sendPoll}
+          polls={polls}
+          selectPollOption={selectPollOption}
+          participants={participants}
         />
       </div>
 

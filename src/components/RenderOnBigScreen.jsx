@@ -23,6 +23,7 @@ const RenderOnBigScreen = ({
   duration,
   participantsOpen,
   toggleParticipants,
+  selectPollOption,
 }) => {
   const { state } = useDataLayerValue();
   const { userData } = state;
@@ -83,6 +84,7 @@ const RenderOnBigScreen = ({
         participantsOpen={participantsOpen}
         toggleParticipants={toggleParticipants}
         sendPoll={sendPoll}
+        selectPollOption={selectPollOption}
       />
     </>
   );
