@@ -26,7 +26,7 @@ const ChatDock = ({
     >
       {/* Head */}
       <h1 className="text-xl font-semibold flex justify-between items-center border-b border-b-[rgba(0,0,0,0.25)] pb-2">
-        <span>{openSection === "chat" ? "Live Chat" : "Polls"}</span>
+        <span>Live {openSection === "chat" ? "Chat" : "Polls"}</span>
         <button onClick={toggleChat}>
           <X />
         </button>
