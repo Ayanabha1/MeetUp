@@ -233,6 +233,7 @@ const MeetingPage = () => {
 
   const handleRecieveMessage = async (messageData, MemberId) => {
     let data = JSON.parse(messageData.text);
+    console.log(data);
     if (data.type === "chat") {
       setChats((chats) => [...chats, data]);
     } else if (data.type === "poll") {
@@ -256,6 +257,20 @@ const MeetingPage = () => {
     setNewMessage(message);
   };
 
+  const sendFile = (data) => {
+    const newFile = {
+      ...data,
+      type: "chat",
+      name: name,
+      picture: state?.userData?.profile_image,
+      time: getTime(),
+      uid: uid,
+      email: state?.userData?.email,
+    };
+
+    channelRef.current.sendMessage({ text: JSON.stringify(newFile) });
+    setChats((chats) => [...chats, newFile]);
+  };
   const sendMessage = (e) => {
     // e.preventDefault();
     if (newMessage === "") {
@@ -266,6 +281,7 @@ const MeetingPage = () => {
 
     const newChat = {
       type: "chat",
+      chatType: "chat",
       name: name,
       uid: uid,
       email: state?.userData?.email,
@@ -376,6 +392,7 @@ const MeetingPage = () => {
           uid={uid}
           duration={duration}
           selectPollOption={selectPollOption}
+          sendFile={sendFile}
         />
       ) : (
         <RenderOnSmallScreen
@@ -398,6 +415,7 @@ const MeetingPage = () => {
           uid={uid}
           duration={duration}
           selectPollOption={selectPollOption}
+          sendFile={sendFile}
         />
       )}
     </div>
