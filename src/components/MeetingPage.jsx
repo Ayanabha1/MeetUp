@@ -37,6 +37,7 @@ const MeetingPage = () => {
   const init = async (roomName) => {
     // RTM
     document.title = `${roomName} - Meetup`;
+
     try {
       await rtm__client.login({ uid });
       await rtm__client.addOrUpdateLocalUserAttributes({
@@ -368,6 +369,20 @@ const MeetingPage = () => {
       clearTimeout(timeoutId);
     };
   }, [state, channelName, rtc__client, ready, tracks]);
+
+  useEffect(() => {
+    console.log("Ready:", ready);
+    const timeoutId = setTimeout(() => {
+      if (!ready) {
+        showError("Please grant camera and microphone access");
+        navigate("/");
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [ready]);
 
   return (
     <div className="meeting-dock relative overflow-hidden bg-primary">

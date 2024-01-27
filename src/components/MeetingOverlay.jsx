@@ -3,6 +3,7 @@ import { AgoraVideoPlayer } from "agora-rtc-react";
 import MeetControls from "./MeetControls";
 import ParticipantsSheet from "./ParticipantsSheet";
 import ChatDock from "./ChatDock";
+import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const ParticipantTracks = ({
   tracks,
@@ -11,19 +12,60 @@ const ParticipantTracks = ({
   toggleChat,
   channelRef,
   uid,
+  changeSpotLight,
+  spotLight,
 }) => {
+  const { state } = useDataLayerValue();
   const profile =
     "https://ik.imagekit.io/Ayanabha1/profile%20-%20Copy.png?updatedAt=1706025234240";
   return (
-    <div className="absolute top-0 right-0 h-[98%] min-w-[25vw]  p-2 flex flex-col gap-1">
+    <div className="absolute top-0 right-0 h-[98%] min-w-[300px] w-[25vw]  p-2 flex flex-col gap-1">
+      {spotLight !== null && (
+        <div
+          className={`cursor-pointer hover:opacity-75 transition-all duration-300 w-full h-[33%] rounded-xl overflow-hidden relative border-2 border-[rgba(255,255,255,0.5)]`}
+          onClick={() => {
+            changeSpotLight(null);
+          }}
+        >
+          {tracks && tracks[1] && !tracks[1].muted ? (
+            <AgoraVideoPlayer
+              videoTrack={tracks && tracks[1]}
+              className={`h-full w-full`}
+            />
+          ) : (
+            <div className="bg-black flex justify-center items-center w-full h-full">
+              <img
+                src={state?.userData?.profile_image || profile}
+                className="w-[10vh] h-[10vh] object-cover rounded-[50%]"
+              />
+            </div>
+          )}
+          {/* {participant?.mic__muted && (
+            <img
+              className="absolute left-[10px] bottom-[10px] z-50 bg-[rgb(217,84,58)] w-[30px] h-[30px] p-[5px] rounded-[50%]"
+              src={micoff}
+            />
+          )} */}
+          <span className="absolute left-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)]  px-[12px] py-[2px] rounded-[8px]">
+            {state?.userData?.name} (You)
+          </span>
+        </div>
+      )}
       {/* More participants */}
       {participants?.map((participant, i) => {
-        if (i >= 3) return null;
+        if (
+          i >= 3 ||
+          (spotLight !== null && participant?.uid === spotLight?.uid)
+        )
+          return null;
         return (
           <>
             <div
-              className={`w-full h-[33%] rounded-xl overflow-hidden relative border-2 border-[rgba(255,255,255,0.5)]`}
+              className={`cursor-pointer hover:opacity-75 transition-all duration-300  w-full h-[33%] rounded-xl overflow-hidden relative border-2 border-[rgba(255,255,255,0.5)]`}
               key={i}
+              onClick={() => {
+                changeSpotLight(participant);
+              }}
             >
               {participant?.videoTrack ? (
                 <AgoraVideoPlayer
@@ -46,7 +88,7 @@ const ParticipantTracks = ({
                 />
               )}
               <span className="absolute left-[10px] bottom-[10px] text-black font-semibold bg-[rgba(255,255,255,0.3)]  px-[12px] py-[2px] rounded-[8px]">
-                {participant?.name}
+                {participant?.name} {participant?.uid === uid && "(You)"}
               </span>
             </div>
           </>
@@ -104,6 +146,8 @@ export const MeetingOverlay = ({
   sendPoll,
   selectPollOption,
   sendFile,
+  changeSpotLight,
+  spotLight,
 }) => {
   return (
     <div className=" absolute top-0 left-0 w-full h-full flex transition-all duration-300">
@@ -123,6 +167,8 @@ export const MeetingOverlay = ({
           participants={participants}
           toggleChat={toggleChat}
           uid={uid}
+          changeSpotLight={changeSpotLight}
+          spotLight={spotLight}
         />
       </div>
 
@@ -147,6 +193,8 @@ export const MeetingOverlay = ({
             participantsOpen={participantsOpen}
             toggleParticipants={toggleParticipants}
             uid={uid}
+            changeSpotLight={changeSpotLight}
+            spotLight={spotLight}
           />
         </div>
         <div
