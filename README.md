@@ -40,10 +40,10 @@ To create a new room, just click on the 'Create' button. To join an existing roo
 
 ## 📸 Screenshots
 
+![meetup-ss-5](https://github.com/Ayanabha1/MeetUp/assets/63809278/6db16b30-56d8-4d68-b56e-cdd1b2f15b00)
+![meetup-ss-3](https://github.com/Ayanabha1/MeetUp/assets/63809278/f07aeb62-9822-4679-a632-d78a64aac70d)
 ![image](https://github.com/Ayanabha1/MeetUp/assets/63809278/0d25a9ea-dcb8-46ac-bc42-d54361e3972a)
 ![image](https://github.com/Ayanabha1/MeetUp/assets/63809278/b7939f52-3ee6-40bf-85ea-607c2c8bee7e)
-![image](https://github.com/Ayanabha1/MeetUp/assets/63809278/fceb10a0-72ec-489e-a22f-53723d0ef0c6)
-![image](https://github.com/Ayanabha1/MeetUp/assets/63809278/a362af97-540a-46ad-9ca2-418b28b0d27b)
 
 ## 📧 Contact
 
