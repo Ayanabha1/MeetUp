@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { X, Users, Search } from "lucide-react";
+import { X, Users, Search, Pin, PinOff } from "lucide-react";
 import { useDataLayerValue } from "../Datalayer/DataLayer";
 
 const ParticipantsSheet = ({
@@ -7,6 +7,8 @@ const ParticipantsSheet = ({
   participants,
   participantsOpen,
   toggleParticipants,
+  spotLight,
+  changeSpotLight,
 }) => {
   const { state } = useDataLayerValue();
   const [searchList, setSearchList] = useState([]);
@@ -77,6 +79,14 @@ const ParticipantsSheet = ({
                 className="h-10 w-10 rounded-full object-cover"
               />
               <span className="text-lg">{state?.userData?.name} (You)</span>
+              {spotLight !== null && (
+                <Pin
+                  className="ml-auto h-5 w-5 cursor-pointer hover:opacity-75"
+                  onClick={() => {
+                    changeSpotLight(null);
+                  }}
+                />
+              )}
             </div>
             {participants?.map((user, i) => (
               <div className="flex gap-2 items-center" key={i}>
@@ -85,6 +95,21 @@ const ParticipantsSheet = ({
                   className="h-10 w-10 rounded-full object-cover"
                 />
                 <span className="text-lg">{user?.name || "User"}</span>
+                {spotLight === user ? (
+                  <PinOff
+                    className="ml-auto h-5 w-5 cursor-pointer hover:opacity-75"
+                    onClick={() => {
+                      changeSpotLight(null);
+                    }}
+                  />
+                ) : (
+                  <Pin
+                    className="ml-auto h-5 w-5 cursor-pointer hover:opacity-75"
+                    onClick={() => {
+                      changeSpotLight(user);
+                    }}
+                  />
+                )}
               </div>
             ))}
           </>
