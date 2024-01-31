@@ -49,12 +49,21 @@ const MeetControls = ({
   };
 
   const leaveRoom = async (e) => {
-    for (let i = 0; i < tracks.length; i++) {
-      tracks[i].close();
-      tracks[i].stop();
+    // Show a confirmation dialog
+    
+    const confirmed = window.confirm("Are you sure you want to leave the room?");
+  
+    // If the user clicks OK, proceed to leave the room
+    if (confirmed) {
+      for (let i = 0; i < tracks.length; i++) {
+        tracks[i].close();
+        tracks[i].stop();
+      }
+      navigate("/");
     }
-    navigate("/");
+    // If the user clicks Cancel, do nothing
   };
+  
 
   const controls = [
     {
